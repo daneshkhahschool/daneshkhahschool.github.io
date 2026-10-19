@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>کاوش کشورها</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,sans-serif; }
+  body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    min-height:100vh; color:#fff; padding:20px;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  h1 {
+    margin-bottom:15px; font-size:2rem;
+    background: linear-gradient(90deg,#f9d423,#ff4e50,#00c9ff);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-size:200%; animation: shine 4s infinite;
+  }
+  @keyframes shine { 0%,100%{background-position:0%} 50%{background-position:100%} }
+
+  .hud { display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap; justify-content:center; }
+  .hud-item {
+    background: rgba(255,255,255,.1); padding:8px 18px; border-radius:25px;
+    border:1px solid rgba(255,255,255,.2); backdrop-filter: blur(8px);
+  }
+
+  .grid {
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
+    gap:15px; max-width:900px; width:100%;
+  }
+  .country-card {
+    background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+    border-radius:18px; padding:20px 12px; text-align:center; cursor:pointer;
+    backdrop-filter: blur(10px); transition: all .35s cubic-bezier(.34,1.56,.64,1);
+    position:relative; overflow:hidden;
+  }
+  .country-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,200,255,.3);
+    border-color: #00c9ff;
+  }
+  .country-card.visited { border-color: #00e676; }
+  .country-card.visited::after {
+    content:'✓'; position:absolute; top:8px; left:8px;
+    background:#00e676; color:#000; width:22px; height:22px;
+    border-radius:50%; font-weight:bold; font-size:.8rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .flag {
+    font-size:3rem; display:block; margin-bottom:8px;
+    animation: float 3s infinite ease-in-out;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,.5));
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  .cname { font-weight:bold; font-size:1rem; }
+
+  .modal-bg {
+    position:fixed; inset:0; background:rgba(0,0,0,.8);
+    display:none; align-items:center; justify-content:center;
+    z-index:100; backdrop-filter: blur(5px); padding:20px;
+  }
+  .modal-bg.active { display:flex; animation: fadeIn .3s; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .modal {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    border-radius:25px; padding:30px; max-width:500px; width:100%;
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow: 0 25px 70px rgba(0,0,0,.7);
+    animation: zoomIn .4s cubic-bezier(.34,1.56,.64,1);
+    position:relative; max-height:90vh; overflow-y:auto;
+  }
+  @keyframes zoomIn { from{transform:scale(.7); opacity:0} to{transform:scale(1); opacity:1} }
+
+  .close-btn {
+    position:absolute; top:15px; left:15px; background:rgba(255,255,255,.2);
+    border:none; color:#fff; width:35px; height:35px; border-radius:50%;
+    cursor:pointer; font-size:1.2rem; transition:.3s;
+  }
+  .close-btn:hover { background:#ff4e50; transform:rotate(90deg); }
+
+  .modal h2 { font-size:1.8rem; margin-bottom:15px; text-align:center; }
+  .modal .big-flag { font-size:5rem; text-align:center; margin:10px 0; animation: float 3s infinite; }
+  .data-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:15px 0; }
+  .data-item { background:rgba(0,0,0,.25); padding:10px; border-radius:12px; font-size:.9rem; }
+  .data-item b { color:#f9d423; display:block; font-size:.75rem; margin-bottom:3px; }
+  .fact-box {
+    background: rgba(249,212,35,.15); border-right:4px solid #f9d423;
+    padding:12px; border-radius:10px; margin-top:10px; font-size:.9rem; line-height:1.7;
+  }
+  .quiz { margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,.2); }
+  .quiz h3 { color:#00c9ff; margin-bottom:10px; font-size:1rem; }
+  .opts { display:grid; gap:8px; }
+  .opt2 {
+    background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+    padding:10px; border-radius:10px; cursor:pointer; color:#fff;
+    font-family:inherit; text-align:right; transition:.25s; font-size:.95rem;
+  }
+  .opt2:hover:not(:disabled) { background: rgba(0,201,255,.3); transform:translateX(-5px); }
+  .opt2:disabled { cursor:not-allowed; }
+  .opt2.correct { background:#00e676 !important; color:#000; font-weight:bold; }
+  .opt2.wrong { background:#ff4e50 !important; }
+</style>
+</head>
+<body>
+<h1>🌍 کاوش کشورها</h1>
+<div class="hud">
+  <div class="hud-item">امتیاز: <b id="score">0</b></div>
+  <div class="hud-item">کشف‌شده: <b id="found">0</b>/<b id="total">0</b></div>
+</div>
+<div class="grid" id="grid"></div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+const countries = [
+  { name:'ژاپن', flag:'🇯🇵', capital:'توکیو', pop:'125 میلیون', area:'377,975 km²', lang:'ژاپنی', currency:'ین',
+    fact:'ژاپن از 6,852 جزیره تشکیل شده و یکی از پیشرفته‌ترین اقتصادهای جهان را دارد.',
+    q:'پایتخت ژاپن کجاست؟', opts:['اوساکا','توکیو','کیوتو','ناگویا'], ans:1 },
+  { name:'برزیل', flag:'🇧🇷', capital:'برازیلیا', pop:'215 میلیون', area:'8,515,767 km²', lang:'پرتغالی', currency:'رئال',
+    fact:'برزیل بزرگ‌ترین کشور آمریکای جنوبی و خانه جنگل آمازون است.',
+    q:'بزرگ‌ترین جنگل بارانی جهان کجاست؟', opts:['کنگو','آمازون','بورنئو','سیبری'], ans:1 },
+  { name:'مصر', flag:'🇪🇬', capital:'قاهره', pop:'105 میلیون', area:'1,002,450 km²', lang:'عربی', currency:'پوند مصر',
+    fact:'مصر تمدنی 7000 ساله دارد و اهرام جیزه تنها عجایب باقی‌مانده جهان باستان هستند.',
+    q:'اهرام جیزه در کدام کشور است؟', opts:['سودان','مصر','لیبی','مراکش'], ans:1 },
+  { name:'استرالیا', flag:'🇦🇺', capital:'کانبرا', pop:'26 میلیون', area:'7,692,024 km²', lang:'انگلیسی', currency:'دلار استرالیا',
+    fact:'استرالیا تنها کشوری است که هم یک قاره و هم یک کشور محسوب می‌شود.',
+    q:'پایتخت استرالیا کدام است؟', opts:['سیدنی','ملبورن','کانبرا','پرت'], ans:2 },
+  { name:'کانادا', flag:'🇨🇦', capital:'اتاوا', pop:'40 میلیون', area:'9,984,670 km²', lang:'انگلیسی/فرانسوی', currency:'دلار کانادا',
+    fact:'کانادا دومین کشور بزرگ جهان و دارای بیشترین خط ساحلی است.',
+    q:'طولانی‌ترین خط ساحلی جهان متعلق به کجاست؟', opts:['روسیه','اندونزی','کانادا','استرالیا'], ans:2 },
+  { name:'هند', flag:'🇮🇳', capital:'دهلی نو', pop:'1.4 میلیارد', area:'3,287,263 km²', lang:'هندی/انگلیسی', currency:'روپیه',
+    fact:'هند پرجمعیت‌ترین کشور جهان و بزرگ‌ترین دموکراسی دنیاست.',
+    q:'پرجمعیت‌ترین کشور جهان کدام است؟', opts:['چین','هند','آمریکا','اندونزی'], ans:1 },
+  { name:'فرانسه', flag:'🇫🇷', capital:'پاریس', pop:'68 میلیون', area:'551,695 km²', lang:'فرانسوی', currency:'یورو',
+    fact:'فرانسه پربازدیدترین کشور جهان است و سالانه 90 میلیون گردشگر دارد.',
+    q:'پربازدیدترین کشور جهان برای گردشگری؟', opts:['اسپانیا','آمریکا','فرانسه','ایتالیا'], ans:2 },
+  { name:'روسیه', flag:'🇷🇺', capital:'مسکو', pop:'144 میلیون', area:'17,098,242 km²', lang:'روسی', currency:'روبل',
+    fact:'روسیه بزرگ‌ترین کشور جهان است و 11 منطقه زمانی دارد.',
+    q:'روسیه چند منطقه زمانی دارد؟', opts:['9','10','11','12'], ans:2 },
+  { name:'مکزیک', flag:'🇲🇽', capital:'مکزیکوسیتی', pop:'130 میلیون', area:'1,964,375 km²', lang:'اسپانیایی', currency:'پزو',
+    fact:'مکزیک مهد تمدن‌های مایا و آزتک است و شکلات از اینجا به جهان رفت!',
+    q:'تمدن مایا در کدام کشور بود؟', opts:['پرو','مکزیک','برزیل','کلمبیا'], ans:1 },
+  { name:'ایتالیا', flag:'🇮🇹', capital:'رم', pop:'59 میلیون', area:'301,340 km²', lang:'ایتالیایی', currency:'یورو',
+    fact:'ایتالیا بیشترین میراث جهانی یونسکو را در جهان دارد.',
+    q:'کدام کشور بیشترین میراث یونسکو را دارد؟', opts:['چین','ایتالیا','فرانسه','اسپانیا'], ans:1 },
+  { name:'چین', flag:'🇨🇳', capital:'پکن', pop:'1.41 میلیارد', area:'9,596,961 km²', lang:'ماندارین', currency:'یوان',
+    fact:'دیوار بزرگ چین بیش از 21,000 کیلومتر طول دارد.',
+    q:'دیوار بزرگ چین چقدر طول دارد؟', opts:['5,000 km','10,000 km','21,000 km','30,000 km'], ans:2 },
+  { name:'آلمان', flag:'🇩🇪', capital:'برلین', pop:'84 میلیون', area:'357,022 km²', lang:'آلمانی', currency:'یورو',
+    fact:'آلمان بزرگ‌ترین اقتصاد اروپا و زادگاه خودرو و چاپ است.',
+    q:'پایتخت آلمان کجاست؟', opts:['مونیخ','هامبورگ','برلین','فرانکفورت'], ans:2 }
+];
+
+const grid = document.getElementById('grid');
+const modalBg = document.getElementById('modalBg');
+const modal = document.getElementById('modal');
+let score = 0;
+const visited = new Set();
+
+document.getElementById('total').textContent = countries.length;
+
+countries.forEach((c, i) => {
+  const card = document.createElement('div');
+  card.className = 'country-card';
+  card.dataset.i = i;
+  card.innerHTML = `<span class="flag">${c.flag}</span><div class="cname">${c.name}</div>`;
+  card.addEventListener('click', () => openCountry(i));
+  grid.appendChild(card);
+});
+
+function openCountry(i) {
+  const c = countries[i];
+  const card = document.querySelector(`.country-card[data-i="${i}"]`);
+  if (!visited.has(i)) {
+    visited.add(i);
+    card.classList.add('visited');
+    document.getElementById('found').textContent = visited.size;
+  }
+
+  modal.innerHTML = `
+    <button class="close-btn">✕</button>
+    <h2>${c.name}</h2>
+    <div class="big-flag">${c.flag}</div>
+    <div class="data-grid">
+      <div class="data-item"><b>🏛 پایتخت</b>${c.capital}</div>
+      <div class="data-item"><b>👥 جمعیت</b>${c.pop}</div>
+      <div class="data-item"><b>📐 مساحت</b>${c.area}</div>
+      <div class="data-item"><b>🗣 زبان</b>${c.lang}</div>
+      <div class="data-item"><b>💰 واحد پول</b>${c.currency}</div>
+    </div>
+    <div class="fact-box">💡 ${c.fact}</div>
+    <div class="quiz">
+      <h3>❓ ${c.q}</h3>
+      <div class="opts">
+        ${c.opts.map((o,idx)=>`<button class="opt2" data-idx="${idx}">${o}</button>`).join('')}
+      </div>
+    </div>
+  `;
+
+  modal.querySelector('.close-btn').addEventListener('click', closeModal);
+
+  const btns = modal.querySelectorAll('.opt2');
+  btns.forEach(b => {
+    b.addEventListener('click', () => answer(i, parseInt(b.dataset.idx), btns));
+  });
+
+  modalBg.classList.add('active');
+}
+
+function answer(i, chosen, btns) {
+  const c = countries[i];
+  btns.forEach(b => b.disabled = true);
+  if (chosen === c.ans) {
+    btns[chosen].classList.add('correct');
+    score += 15;
+  } else {
+    btns[chosen].classList.add('wrong');
+    btns[c.ans].classList.add('correct');
+  }
+  document.getElementById('score').textContent = score;
+}
+
+function closeModal() { modalBg.classList.remove('active'); }
+modalBg.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
+</script>
+</body>
+</html>

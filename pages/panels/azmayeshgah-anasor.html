@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>آزمایشگاه عناصر</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,sans-serif; }
+  body {
+    background: linear-gradient(135deg, #141e30, #243b55);
+    min-height:100vh; color:#fff; padding:20px;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  h1 {
+    margin-bottom:15px; font-size:2rem;
+    background: linear-gradient(90deg,#00ff87,#60efff,#ff6ec4,#7873f5);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-size:300%; animation: rainbow 6s infinite linear;
+  }
+  @keyframes rainbow { 0%{background-position:0%} 100%{background-position:300%} }
+
+  .hud { display:flex; gap:12px; margin:15px 0; flex-wrap:wrap; justify-content:center; }
+  .hud-item {
+    background: rgba(255,255,255,.08); padding:8px 18px; border-radius:25px;
+    border:1px solid rgba(255,255,255,.2); backdrop-filter: blur(8px);
+  }
+
+  .grid {
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(90px,1fr));
+    gap:10px; max-width:800px; width:100%;
+  }
+  .element {
+    aspect-ratio: 1;
+    border-radius:12px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition: all .3s cubic-bezier(.34,1.56,.64,1);
+    position:relative; overflow:hidden;
+    border:1px solid rgba(255,255,255,.15);
+    animation: floatIn .5s backwards;
+  }
+  @keyframes floatIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
+
+  .element:hover {
+    transform: scale(1.15) rotate(-3deg);
+    box-shadow: 0 15px 35px rgba(0,255,255,.4);
+    z-index:10;
+  }
+  .element.visited { box-shadow: inset 0 0 0 2px #00ff87; }
+
+  .element .sym { font-size:1.4rem; font-weight:bold; line-height:1; }
+  .element .num { font-size:.7rem; opacity:.7; position:absolute; top:5px; right:7px; }
+  .element .ename { font-size:.65rem; margin-top:4px; opacity:.85; }
+
+  /* رنگ دسته‌بندی */
+  .cat-alkali { background: linear-gradient(135deg, #ff6b6b, #c92a2a); }
+  .cat-alkaline { background: linear-gradient(135deg, #ffa94d, #d9480f); }
+  .cat-transition { background: linear-gradient(135deg, #ffd43b, #e67700); color:#000; }
+  .cat-post { background: linear-gradient(135deg, #a9e34b, #5c940d); color:#000; }
+  .cat-metalloid { background: linear-gradient(135deg, #38d9a9, #087f5b); }
+  .cat-nonmetal { background: linear-gradient(135deg, #4dabf7, #1864ab); }
+  .cat-halogen { background: linear-gradient(135deg, #da77f2, #862e9c); }
+  .cat-noble { background: linear-gradient(135deg, #f783ac, #a61e4d); }
+
+  .modal-bg {
+    position:fixed; inset:0; background:rgba(0,0,0,.85);
+    display:none; align-items:center; justify-content:center;
+    z-index:100; backdrop-filter: blur(6px); padding:20px;
+  }
+  .modal-bg.active { display:flex; animation: fadeIn .3s; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .modal {
+    background: linear-gradient(135deg, #1a2a3a, #0d1b2a);
+    border-radius:25px; padding:30px; max-width:520px; width:100%;
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow: 0 25px 70px rgba(0,0,0,.7);
+    animation: zoomIn .4s cubic-bezier(.34,1.56,.64,1);
+    position:relative; max-height:90vh; overflow-y:auto;
+  }
+  @keyframes zoomIn { from{transform:scale(.7); opacity:0} to{transform:scale(1); opacity:1} }
+
+  .close-btn {
+    position:absolute; top:15px; left:15px; background:rgba(255,255,255,.15);
+    border:none; color:#fff; width:35px; height:35px; border-radius:50%;
+    cursor:pointer; font-size:1.2rem; transition:.3s;
+  }
+  .close-btn:hover { background:#ff4e50; transform:rotate(90deg); }
+
+  .el-header { text-align:center; margin-bottom:15px; }
+  .el-symbol {
+    font-size:5rem; font-weight:bold; line-height:1;
+    background: linear-gradient(135deg,#00ff87,#60efff);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    animation: glow 2s infinite alternate;
+  }
+  @keyframes glow { from{filter:drop-shadow(0 0 5px #00ff87)} to{filter:drop-shadow(0 0 20px #60efff)} }
+  .el-name { font-size:1.5rem; margin-top:5px; }
+
+  .data-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:15px 0; }
+  .data-item { background:rgba(255,255,255,.08); padding:10px; border-radius:12px; font-size:.85rem; }
+  .data-item b { color:#60efff; display:block; font-size:.72rem; margin-bottom:3px; }
+  .fact-box {
+    background: rgba(0,255,135,.1); border-right:4px solid #00ff87;
+    padding:12px; border-radius:10px; margin-top:10px; font-size:.9rem; line-height:1.7;
+  }
+  .quiz { margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,.15); }
+  .quiz h3 { color:#ff6ec4; margin-bottom:10px; font-size:1rem; }
+  .opts { display:grid; gap:8px; }
+  .opt2 {
+    background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+    padding:10px; border-radius:10px; cursor:pointer; color:#fff;
+    font-family:inherit; text-align:right; transition:.25s; font-size:.95rem;
+  }
+  .opt2:hover:not(:disabled) { background: rgba(0,255,135,.25); transform:translateX(-5px); }
+  .opt2:disabled { cursor:not-allowed; }
+  .opt2.correct { background:#00e676 !important; color:#000; font-weight:bold; }
+  .opt2.wrong { background:#ff4e50 !important; }
+
+  .legend {
+    display:flex; flex-wrap:wrap; gap:8px; margin:15px 0; justify-content:center;
+    font-size:.75rem;
+  }
+  .legend span { padding:4px 10px; border-radius:15px; }
+</style>
+</head>
+<body>
+<h1>🧪 آزمایشگاه عناصر</h1>
+<div class="hud">
+  <div class="hud-item">امتیاز: <b id="score">0</b></div>
+  <div class="hud-item">کشف‌شده: <b id="found">0</b>/<b id="total">0</b></div>
+</div>
+
+<div class="legend">
+  <span class="cat-alkali">فلز قلیایی</span>
+  <span class="cat-alkaline">فلز قلیایی خاکی</span>
+  <span class="cat-transition">فلز واسطه</span>
+  <span class="cat-post">فلز پس‌واسطه</span>
+  <span class="cat-metalloid">شبه‌فلز</span>
+  <span class="cat-nonmetal">نافلز</span>
+  <span class="cat-halogen">هالوژن</span>
+  <span class="cat-noble">گاز نجیب</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+const elements = [
+  { sym:'H', num:1, name:'هیدروژن', cat:'nonmetal', mass:'1.008', group:'نافلز', use:'سوخت پاک و ستاره‌ها',
+    fact:'فراوان‌ترین عنصر جهان است و 75% جرم کائنات را می‌سازد.',
+    q:'فراوان‌ترین عنصر جهان چیست؟', opts:['اکسیژن','هلیوم','هیدروژن','کربن'], ans:2 },
+  { sym:'He', num:2, name:'هلیوم', cat:'noble', mass:'4.003', group:'گاز نجیب', use:'بادکنک و سرمایش',
+    fact:'تنها عنصری است که در دمای صفر مطلق هم مایع نمی‌شود (زیر فشار معمولی).',
+    q:'هلیوم در چه گروهی است؟', opts:['هالوژن','گاز نجیب','نافلز','فلز قلیایی'], ans:1 },
+  { sym:'Li', num:3, name:'لیتیوم', cat:'alkali', mass:'6.94', group:'فلز قلیایی', use:'باتری و روان‌پزشکی',
+    fact:'سبک‌ترین فلز جامد جهان است و در باتری‌های موبایل استفاده می‌شود.',
+    q:'سبک‌ترین فلز جامد کدام است؟', opts:['سدیم','لیتیوم','پتاسیم','منیزیم'], ans:1 },
+  { sym:'C', num:6, name:'کربن', cat:'nonmetal', mass:'12.011', group:'نافلز', use:'الماس و گرافیت',
+    fact:'پایه حیات است و به شکل‌های الماس، گرافیت و گرافن وجود دارد.',
+    q:'الماس از چه عنصری ساخته شده؟', opts:['سیلیس','کربن','کلسیم','آهن'], ans:1 },
+  { sym:'N', num:7, name:'نیتروژن', cat:'nonmetal', mass:'14.007', group:'نافلز', use:'کود و جو زمین',
+    fact:'78% جو زمین از نیتروژن تشکیل شده است.',
+    q:'چند درصد جو زمین نیتروژن است؟', opts:['21%','50%','78%','90%'], ans:2 },
+  { sym:'O', num:8, name:'اکسیژن', cat:'nonmetal', mass:'15.999', group:'نافلز', use:'تنفس و سوختن',
+    fact:'21% جو زمین را تشکیل می‌دهد و برای تنفس ضروری است.',
+    q:'اکسیژن چند درصد جو را تشکیل می‌دهد؟', opts:['11%','21%','31%','41%'], ans:1 },
+  { sym:'Na', num:11, name:'سدیم', cat:'alkali', mass:'22.990', group:'فلز قلیایی', use:'نمک خوراکی',
+    fact:'با کلر ترکیب می‌شود و نمک خوراکی NaCl را می‌سازد.',
+    q:'نمک خوراکی از کدام دو عنصر است؟', opts:['Na و Cl','K و Cl','Ca و Cl','Li و Cl'], ans:0 },
+  { sym:'Mg', num:12, name:'منیزیم', cat:'alkaline', mass:'24.305', group:'قلیایی خاکی', use:'بدن و آتش‌بازی',
+    fact:'در کلروفیل گیاهان وجود دارد و برای بدن ضروری است.',
+    q:'منیزیم در کدام مولکول گیاهی است؟', opts:['هموگلوبین','کلروفیل','گلوکز','سلولز'], ans:1 },
+  { sym:'Al', num:13, name:'آلومینیوم', cat:'post', mass:'26.982', group:'فلز پس‌واسطه', use:'قوطی و هواپیما',
+    fact:'فراوان‌ترین فلز در پوسته زمین است.',
+    q:'فراوان‌ترین فلز پوسته زمین؟', opts:['آهن','آلومینیوم','مس','روی'], ans:1 },
+  { sym:'Si', num:14, name:'سیلیسیم', cat:'metalloid', mass:'28.086', group:'شبه‌فلز', use:'تراشه کامپیوتر',
+    fact:'پایه صنعت الکترونیک و تراشه‌های کامپیوتری است.',
+    q:'تراشه‌های کامپیوتری از چه ساخته می‌شوند؟', opts:['گرافیت','سیلیسیم','مس','طلا'], ans:1 },
+  { sym:'Cl', num:17, name:'کلر', cat:'halogen', mass:'35.45', group:'هالوژن', use:'ضدعفونی آب',
+    fact:'برای ضدعفونی آب استخرها استفاده می‌شود.',
+    q:'کلر در کدام گروه است؟', opts:['گاز نجیب','هالوژن','نافلز','فلز قلیایی'], ans:1 },
+  { sym:'Fe', num:26, name:'آهن', cat:'transition', mass:'55.845', group:'فلز واسطه', use:'فولاد و خون',
+    fact:'در هموگلوبین خون وجود دارد و هسته زمین عمدتاً از آهن است.',
+    q:'آهن در کدام مولکول خون است؟', opts:['پلاسما','هموگلوبین','پلاکت','گلبول سفید'], ans:1 },
+  { sym:'Cu', num:29, name:'مس', cat:'transition', mass:'63.546', group:'فلز واسطه', use:'سیم برق',
+    fact:'رسانای عالی برق است و در سیم‌کشی استفاده می‌شود.',
+    q:'بهترین رسانای برق کدام است؟', opts:['آهن','طلا','نقره','مس'], ans:2 },
+  { sym:'Ag', num:47, name:'نقره', cat:'transition', mass:'107.868', group:'فلز واسطه', use:'جواهر و آینه',
+    fact:'بهترین رسانای الکتریکی و حرارتی بین فلزات است.',
+    q:'نقره چه ویژگی خاصی دارد؟', opts:['سبک‌ترین','سنگین‌ترین','بهترین رسانا','گران‌ترین'], ans:2 },
+  { sym:'Au', num:79, name:'طلا', cat:'transition', mass:'196.967', group:'فلز واسطه', use:'جواهر و الکترونیک',
+    fact:'چکش‌خوارترین فلز است و می‌توان آن را تا ورقه‌های نازک کوبید.',
+    q:'نماد شیمیایی طلا چیست؟', opts:['Go','Au','Ag','Tl'], ans:1 }
+];
+
+const grid = document.getElementById('grid');
+const modalBg = document.getElementById('modalBg');
+const modal = document.getElementById('modal');
+let score = 0;
+const visited = new Set();
+
+document.getElementById('total').textContent = elements.length;
+
+elements.forEach((el, i) => {
+  const div = document.createElement('div');
+  div.className = `element cat-${el.cat}`;
+  div.dataset.i = i;
+  div.style.animationDelay = (i * 0.04) + 's';
+  div.innerHTML = `
+    <span class="num">${el.num}</span>
+    <span class="sym">${el.sym}</span>
+    <span class="ename">${el.name}</span>
+  `;
+  div.addEventListener('click', () => openElement(i));
+  grid.appendChild(div);
+});
+
+function openElement(i) {
+  const el = elements[i];
+  const div = document.querySelector(`.element[data-i="${i}"]`);
+  if (!visited.has(i)) {
+    visited.add(i);
+    div.classList.add('visited');
+    document.getElementById('found').textContent = visited.size;
+  }
+
+  modal.innerHTML = `
+    <button class="close-btn">✕</button>
+    <div class="el-header">
+      <div class="el-symbol">${el.sym}</div>
+      <div class="el-name">${el.name}</div>
+    </div>
+    <div class="data-grid">
+      <div class="data-item"><b>⚛ عدد اتمی</b>${el.num}</div>
+      <div class="data-item"><b>⚖ جرم اتمی</b>${el.mass}</div>
+      <div class="data-item"><b>📊 دسته</b>${el.group}</div>
+      <div class="data-item"><b>🔧 کاربرد</b>${el.use}</div>
+    </div>
+    <div class="fact-box">💡 ${el.fact}</div>
+    <div class="quiz">
+      <h3>❓ ${el.q}</h3>
+      <div class="opts">
+        ${el.opts.map((o,idx)=>`<button class="opt2" data-idx="${idx}">${o}</button>`).join('')}
+      </div>
+    </div>
+  `;
+
+  modal.querySelector('.close-btn').addEventListener('click', closeModal);
+
+  const btns = modal.querySelectorAll('.opt2');
+  btns.forEach(b => {
+    b.addEventListener('click', () => answer(i, parseInt(b.dataset.idx), btns));
+  });
+
+  modalBg.classList.add('active');
+}
+
+function answer(i, chosen, btns) {
+  const el = elements[i];
+  btns.forEach(b => b.disabled = true);
+  if (chosen === el.ans) {
+    btns[chosen].classList.add('correct');
+    score += 20;
+  } else {
+    btns[chosen].classList.add('wrong');
+    btns[el.ans].classList.add('correct');
+  }
+  document.getElementById('score').textContent = score;
+}
+
+function closeModal() { modalBg.classList.remove('active'); }
+modalBg.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
+</script>
+</body>
+</html>

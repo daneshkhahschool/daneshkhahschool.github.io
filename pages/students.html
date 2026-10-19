@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="پنل دانش‌آموزان دبیرستان شهید دانشخواه">
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="icon" href="../images/daneshkhah_icon.png">
+    <title>پنل دانش‌آموزان - دبیرستان شهید دانشخواه</title>
+    <style>
+        .login-box {
+            max-width: 420px;
+            margin: 60px auto;
+            padding: 35px 30px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 217, 102, .18);
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .35);
+            text-align: center;
+        }
+        .login-box h2 {
+            color: #ffd966;
+            font-size: 22px;
+            margin-bottom: 25px;
+        }
+        .login-box input,
+        .login-box select {
+            width: 100%;
+            font-family: inherit;
+            font-size: 15px;
+            color: #fff;
+            background: rgba(0, 0, 0, .35);
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 10px;
+            padding: 13px 15px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color .3s ease, box-shadow .3s ease;
+        }
+        .login-box select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffd966'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            background-size: 18px;
+            padding-left: 40px;
+        }
+        .login-box select option {
+            background: #1e003e;
+            color: #fff;
+        }
+        .login-box input:focus,
+        .login-box select:focus {
+            border-color: #ffd966;
+            box-shadow: 0 0 0 3px rgba(255, 217, 102, .15);
+        }
+        .login-box input::placeholder {
+            color: #9a9a9a;
+        }
+        .login-box button {
+            width: 100%;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e003e;
+            background: linear-gradient(to left, #ffd966, #ff9a3c);
+            border: none;
+            border-radius: 10px;
+            padding: 13px 20px;
+            cursor: pointer;
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+        .login-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(255, 217, 102, .35);
+        }
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+        .panel-content {
+            display: none;
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 217, 102, .18);
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .35);
+            animation: box-in .6s ease;
+        }
+        .panel-content h2 {
+            color: #ffd966;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .class-badge {
+            display: block;
+            text-align: center;
+            color: #ff9a3c;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .panel-content > p {
+            color: #ddd;
+            line-height: 2;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .welcome-name {
+            color: #ffd966;
+            font-weight: 600;
+        }
+        .section-title {
+            color: #ffd966;
+            font-size: 19px;
+            font-weight: 600;
+            text-align: center;
+            margin: 30px auto 18px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #ffd966, #ff9a3c);
+            border-radius: 3px;
+        }
+        .panel-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+        .panel-card {
+            padding: 22px 18px;
+            background: linear-gradient(145deg, rgba(255, 217, 102, .12), rgba(255, 154, 60, .06));
+            border: 1px solid rgba(255, 217, 102, .25);
+            border-radius: 14px;
+            text-align: center;
+            transition: transform .35s ease, box-shadow .35s ease;
+            cursor: pointer;
+        }
+        .panel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 217, 102, .25);
+        }
+        .panel-card h3 {
+            color: #ffd966;
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+        .panel-card p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0, 0, 0, .92);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            animation: lb-fade .3s ease;
+        }
+        .modal.open {
+            display: flex;
+        }
+        .modal-box {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            background: rgba(30, 0, 62, .95);
+            border: 1px solid rgba(255, 217, 102, .3);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(255, 217, 102, .25);
+            animation: lb-zoom .35s ease;
+            min-width: 300px;
+        }
+        .modal-box h3 {
+            color: #ffd966;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        .modal-class {
+            color: #ff9a3c;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            display: block;
+        }
+        .modal-img-placeholder {
+            width: 100%;
+            min-height: 220px;
+            border: 2px dashed rgba(255, 217, 102, .4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9a9a9a;
+            font-size: 14px;
+            background: rgba(0, 0, 0, .3);
+            padding: 20px;
+        }
+        .modal-img-placeholder img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 10px;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            left: 18px;
+            font-size: 38px;
+            color: #ffd966;
+            cursor: pointer;
+            line-height: 1;
+            transition: transform .25s ease, color .25s ease;
+            user-select: none;
+        }
+        .modal-close:hover {
+            transform: scale(1.2) rotate(90deg);
+            color: #fff;
+        }
+        @keyframes lb-fade {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes lb-zoom {
+            from { transform: scale(.85); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+        @media (max-width: 600px) {
+            .panel-content {
+                padding: 20px 15px;
+            }
+            .panel-content h2 {
+                font-size: 19px;
+            }
+            .section-title {
+                font-size: 16px;
+            }
+            .modal-box {
+                padding: 30px 18px;
+            }
+            .modal-close {
+                font-size: 32px;
+                top: 8px;
+                left: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <img src="../images/daneshkhah_icon.png" alt="لوگوی دبیرستان شهید دانشخواه" class="icon" loading="lazy">
+            <h1 class="school-name">دبیرستان شهید دانشخواه</h1>
+            <em class="school-small-info">
+                دبیرستان دولتی هیات امنایی متوسطه اول شهید دانشخواه
+            </em>
+        </div>
+        <nav class="header-bottom" aria-label="منوی اصلی">
+            <a href="../index.html">خانه</a>
+            <a href="about.html">درباره ما</a>
+            <a href="contact.html">ارتباط با ما</a>
+            <a href="students.html" class="active">پنل دانش‌آموزان</a>
+            <a href="employees.html">کارکنان</a>
+            <a href="learn.html">آموزشی</a>
+            <a href="gallery.html">گالری</a>
+            <a href="adress.html">نشانی ما</a>
+            <a href="news.html">اخبار</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="login-box" id="loginBox">
+            <h2>ورود به پنل دانش‌آموزان</h2>
+            <input type="text" id="studentName" placeholder="نام و نام خانوادگی" autocomplete="off">
+            <select id="studentClass">
+                <option value="" disabled selected>انتخاب کلاس</option>
+                <option value="701">701</option>
+                <option value="702">702</option>
+                <option value="703">703</option>
+                <option value="801">801</option>
+                <option value="802">802</option>
+                <option value="803">803</option>
+                <option value="901">901</option>
+                <option value="902">902</option>
+                <option value="903">903</option>
+            </select>
+            <input type="password" inputmode="numberic" pattern="[0-9]*" id="studentPass" placeholder="رمز عبور" autocomplete="off">
+            <button onclick="checkLogin()">ورود</button>
+            <div class="error-msg" id="errorMsg"></div>
+        </div>
+
+        <div class="panel-content" id="panelContent">
+            <h2>خوش آمدید، <span class="welcome-name" id="displayName"></span> عزیز</h2>
+            <span class="class-badge">کلاس: <span id="displayClass"></span></span>
+            <p>به پنل اختصاصی دانش‌آموزان دبیرستان شهید دانشخواه خوش آمدید.</p>
+
+            <h3 class="section-title">دسترسی سریع</h3>
+            <div class="panel-cards">
+                <div class="panel-card" onclick="openModal('برنامه هفتگی')">
+                    <h3>📚 برنامه هفتگی</h3>
+                    <p>مشاهده برنامه کلاسی</p>
+                </div>
+                <div class="panel-card" onclick="window.open('https://my.medu.ir', '_blank')">
+                    <h3>📊 نمرات</h3>
+                    <p>مشاهده در مای مدیو</p>
+                </div>
+                <div class="panel-card" onclick="openModal('فوق برنامه')">
+                    <h3>🎨 فوق برنامه</h3>
+                    <p>مشاهده برنامه فوق برنامه</p>
+                </div>
+                <div class="panel-card">
+                    <h3>📢 اطلاعیه‌ها</h3>
+                    <p>هنوز اطلاعیه‌ای منتشر نشده</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="infoModal">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle"></h3>
+            <span class="modal-class" id="modalClass"></span>
+            <div class="modal-img-placeholder" id="modalBody">
+                تصویر به‌زودی قرار می‌گیرد
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; تمامی حقوق محفوظ است - دبیرستان شهید دانشخواه</p>
+    </footer>
+
+    <a href="makers.html" class="makers-link">سازندگان</a>
+
+    <script>
+        var currentClass = '';
+
+        function checkLogin() {
+            var name = document.getElementById('studentName').value.trim();
+            var cls = document.getElementById('studentClass').value;
+            var pass = document.getElementById('studentPass').value;
+            var errorMsg = document.getElementById('errorMsg');
+            var loginBox = document.getElementById('loginBox');
+            var panelContent = document.getElementById('panelContent');
+
+            if (name === '' || cls === '' || pass === '') {
+                errorMsg.textContent = 'لطفاً نام، کلاس و رمز عبور را وارد کنید.';
+                return;
+            }
+
+            if (pass === '1357924680') {
+                errorMsg.textContent = '';
+                loginBox.style.display = 'none';
+                panelContent.style.display = 'block';
+                document.getElementById('displayName').textContent = name;
+                document.getElementById('displayClass').textContent = cls;
+                currentClass = cls;
+            } else {
+                errorMsg.textContent = 'رمز عبور اشتباه است.';
+            }
+        }
+
+        function openModal(title) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalClass').textContent = 'کلاس ' + currentClass;
+            document.getElementById('modalBody').innerHTML = 'تصویر به‌زودی قرار می‌گیرد';
+            document.getElementById('infoModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').classList.remove('open');
+        }
+
+        document.getElementById('infoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

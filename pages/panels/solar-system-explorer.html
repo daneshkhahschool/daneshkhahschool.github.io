@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>کاوشگر سیارات</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,sans-serif; }
+  body {
+    background: radial-gradient(ellipse at center, #1a1a3e 0%, #000010 100%);
+    color:#fff; min-height:100vh; overflow-x:hidden;
+    display:flex; flex-direction:column; align-items:center;
+    padding-bottom:40px;
+  }
+  .stars { position:fixed; inset:0; pointer-events:none; z-index:0; }
+  .star {
+    position:absolute; background:#fff; border-radius:50%;
+    animation: twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity:.3; }
+    50% { opacity:1; }
+  }
+  h1 {
+    margin:20px; font-size:2.2rem; z-index:1; position:relative;
+    background: linear-gradient(90deg,#ff8a00,#e52e71,#8a2be2,#00d4ff);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-size:300% 300%; animation: gradientMove 5s infinite;
+  }
+  @keyframes gradientMove { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+
+  .score-box {
+    background: rgba(255,255,255,.1); padding:10px 25px; border-radius:30px;
+    border:1px solid rgba(255,255,255,.2); backdrop-filter: blur(10px);
+    margin-bottom:15px; z-index:1; font-size:1.1rem; position:relative;
+  }
+
+  .scene {
+    position:relative; width:100%; max-width:900px; height:600px;
+    display:flex; align-items:center; justify-content:center;
+    z-index:1; margin-bottom:20px;
+  }
+  .sun {
+    position:absolute; width:80px; height:80px; border-radius:50%;
+    background: radial-gradient(circle, #fff700 0%, #ff8c00 60%, #ff4500 100%);
+    box-shadow: 0 0 60px 20px rgba(255,140,0,.7), 0 0 120px 40px rgba(255,69,0,.4);
+    animation: pulse 3s infinite ease-in-out;
+    z-index:5; top:50%; left:50%; transform:translate(-50%,-50%);
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 60px 20px rgba(255,140,0,.7), 0 0 120px 40px rgba(255,69,0,.4); }
+    50% { box-shadow: 0 0 90px 30px rgba(255,200,0,.9), 0 0 160px 60px rgba(255,69,0,.6); }
+  }
+
+  .orbit {
+    position:absolute; border:1px dashed rgba(255,255,255,.15);
+    border-radius:50%; top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    pointer-events:none;
+  }
+  .orbit-wrap {
+    position:absolute; top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    animation: rotate linear infinite;
+  }
+  @keyframes rotate {
+    from { transform: translate(-50%,-50%) rotate(0deg); }
+    to   { transform: translate(-50%,-50%) rotate(360deg); }
+  }
+  .planet {
+    position:absolute; border-radius:50%; cursor:pointer;
+    top:50%; left:50%;
+    box-shadow: inset -6px -6px 12px rgba(0,0,0,.6), 0 0 15px rgba(255,255,255,.3);
+    transition: filter .3s, box-shadow .3s;
+  }
+  .planet:hover {
+    filter: brightness(1.8);
+    box-shadow: inset -6px -6px 12px rgba(0,0,0,.6), 0 0 25px 5px currentColor;
+    z-index:10;
+  }
+
+  .info-card {
+    width:90%; max-width:600px; background: rgba(20,20,50,.9);
+    border:1px solid rgba(255,255,255,.15); border-radius:20px;
+    padding:25px; backdrop-filter: blur(15px); z-index:1; position:relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,.6);
+    animation: slideUp .5s ease;
+  }
+  @keyframes slideUp { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
+
+  .info-card h2 { color:#00d4ff; margin-bottom:10px; font-size:1.6rem; }
+  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:15px 0; }
+  .info-item { background:rgba(255,255,255,.07); padding:10px; border-radius:10px; font-size:.9rem; }
+  .info-item b { color:#ff8a00; display:block; font-size:.75rem; margin-bottom:3px; }
+  .info-card p { line-height:1.7; color:#ccc; font-size:.95rem; }
+
+  .question { margin-top:20px; padding-top:15px; border-top:1px solid rgba(255,255,255,.15); }
+  .question h3 { color:#e52e71; margin-bottom:10px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .opt {
+    background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+    padding:10px; border-radius:10px; cursor:pointer; color:#fff;
+    transition:.3s; font-family:inherit; font-size:.95rem;
+  }
+  .opt:hover:not(:disabled) { background: rgba(0,212,255,.3); transform:translateY(-2px); }
+  .opt:disabled { cursor:not-allowed; }
+  .opt.correct { background:#00c853 !important; animation: pop .4s; }
+  .opt.wrong { background:#d50000 !important; animation: shake .4s; }
+  @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+
+  .feedback { margin-top:10px; font-weight:bold; min-height:22px; }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<h1>🪐 کاوشگر سیارات</h1>
+<div class="score-box">امتیاز: <b id="score">0</b> | کشف‌شده: <b id="collected">0</b>/8</div>
+
+<div class="scene" id="scene">
+  <div class="sun"></div>
+</div>
+
+<div id="infoContainer"></div>
+
+<script>
+// ستاره‌های پس‌زمینه
+const starsEl = document.getElementById('stars');
+for (let i=0; i<120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random()*2 + 1;
+  s.style.width = s.style.height = size + 'px';
+  s.style.left = Math.random()*100 + '%';
+  s.style.top = Math.random()*100 + '%';
+  s.style.animationDelay = Math.random()*3 + 's';
+  starsEl.appendChild(s);
+}
+
+const planets = [
+  { name:'عطارد', emoji:'☿', color:'#a0a0a0', radius:70, size:14, speed:6,
+    fact:'نزدیک‌ترین سیاره به خورشید', temp:'-173 تا 427°C', mass:'0.055 زمین', day:'58.6 روز', year:'88 روز',
+    desc:'عطارد کوچک‌ترین سیاره منظومه شمسی است و اتمسفر قابل توجهی ندارد.',
+    q:'عطارد چندمین سیاره از خورشید است؟', opts:['اول','دوم','سوم','چهارم'], ans:0 },
+  { name:'زهره', emoji:'♀', color:'#e6b87d', radius:110, size:20, speed:8,
+    fact:'داغ‌ترین سیاره منظومه', temp:'462°C', mass:'0.815 زمین', day:'243 روز', year:'225 روز',
+    desc:'زهره با اثر گلخانه‌ای شدید، داغ‌ترین سیاره است.',
+    q:'چرا زهره داغ‌ترین سیاره است؟', opts:['نزدیکی به خورشید','اثر گلخانه‌ای','آتشفشان','طوفان'], ans:1 },
+  { name:'زمین', emoji:'🌍', color:'#2e7dd1', radius:150, size:22, speed:10,
+    fact:'تنها سیاره با حیات', temp:'-88 تا 58°C', mass:'5.97×10²⁴ kg', day:'24 ساعت', year:'365.25 روز',
+    desc:'زمین تنها سیاره شناخته‌شده با حیات است. 71% سطح آن آب است.',
+    q:'چند درصد سطح زمین آب است؟', opts:['51%','61%','71%','81%'], ans:2 },
+  { name:'مریخ', emoji:'♂', color:'#c1440e', radius:190, size:18, speed:12,
+    fact:'سیاره سرخ', temp:'-153 تا 20°C', mass:'0.107 زمین', day:'24.6 ساعت', year:'687 روز',
+    desc:'مریخ به دلیل اکسید آهن سرخ است. بلندترین کوه منظومه در آن است.',
+    q:'بلندترین کوه منظومه کجاست؟', opts:['زمین','زهره','مریخ','عطارد'], ans:2 },
+  { name:'مشتری', emoji:'♃', color:'#d4a373', radius:230, size:38, speed:15,
+    fact:'بزرگ‌ترین سیاره', temp:'-145°C', mass:'318 زمین', day:'9.9 ساعت', year:'12 سال',
+    desc:'مشتری غول گازی با لکه سرخ بزرگ است. 95 قمر دارد.',
+    q:'لکه سرخ بزرگ مشتری چیست؟', opts:['آتشفشان','طوفان','اقیانوس','دهانه'], ans:1 },
+  { name:'زحل', emoji:'♄', color:'#e6c98a', radius:270, size:34, speed:18,
+    fact:'سیاره حلقه‌دار', temp:'-178°C', mass:'95 زمین', day:'10.7 ساعت', year:'29 سال',
+    desc:'زحل با حلقه‌های یخی معروف است. چگالی‌اش کمتر از آب است!',
+    q:'حلقه‌های زحل از چه ساخته شده؟', opts:['گاز','سنگ مذاب','یخ و سنگ','فلز'], ans:2 }
+];
+
+const scene = document.getElementById('scene');
+const infoContainer = document.getElementById('infoContainer');
+let score = 0, collected = 0;
+const collectedSet = new Set();
+const totalPlanets = planets.length;
+document.getElementById('collected').nextSibling.textContent = '/' + totalPlanets;
+document.querySelector('.score-box').innerHTML = `امتیاز: <b id="score">0</b> | کشف‌شده: <b id="collected">0</b>/${totalPlanets}`;
+
+planets.forEach((p, i) => {
+  // مدار
+  const orbit = document.createElement('div');
+  orbit.className = 'orbit';
+  orbit.style.width = (p.radius*2) + 'px';
+  orbit.style.height = (p.radius*2) + 'px';
+  scene.appendChild(orbit);
+
+  // wrapper چرخان
+  const wrap = document.createElement('div');
+  wrap.className = 'orbit-wrap';
+  wrap.style.width = (p.radius*2) + 'px';
+  wrap.style.height = (p.radius*2) + 'px';
+  wrap.style.animationDuration = p.speed + 's';
+  // جهت چرخش متناوب برای زیبایی
+  wrap.style.animationDirection = i % 2 === 0 ? 'normal' : 'reverse';
+
+  // سیاره
+  const planet = document.createElement('div');
+  planet.className = 'planet';
+  planet.style.width = planet.style.height = p.size + 'px';
+  planet.style.background = `radial-gradient(circle at 30% 30%, ${p.color}, #000)`;
+  planet.style.color = p.color;
+  planet.style.right = '-5px';
+  planet.style.top = '50%';
+  planet.style.left = 'auto';
+  planet.style.transform = 'translateY(-50%)';
+  planet.title = p.name;
+  planet.addEventListener('click', () => showInfo(i));
+
+  wrap.appendChild(planet);
+  scene.appendChild(wrap);
+});
+
+function showInfo(i) {
+  const p = planets[i];
+  if (!collectedSet.has(i)) {
+    collectedSet.add(i);
+    collected++;
+    document.getElementById('collected').textContent = collected;
+  }
+
+  infoContainer.innerHTML = `
+    <div class="info-card">
+      <h2>${p.emoji} ${p.name}</h2>
+      <div class="info-grid">
+        <div class="info-item"><b>🌡 دما</b>${p.temp}</div>
+        <div class="info-item"><b>⚖ جرم</b>${p.mass}</div>
+        <div class="info-item"><b>🕐 طول روز</b>${p.day}</div>
+        <div class="info-item"><b>📅 طول سال</b>${p.year}</div>
+      </div>
+      <p>💡 <b>${p.fact}</b><br>${p.desc}</p>
+      <div class="question">
+        <h3>❓ ${p.q}</h3>
+        <div class="options">
+          ${p.opts.map((o,idx)=>`<button class="opt" data-idx="${idx}">${o}</button>`).join('')}
+        </div>
+        <div class="feedback" id="fb-${i}"></div>
+      </div>
+    </div>
+  `;
+
+  // اتصال رویدادها
+  const btns = infoContainer.querySelectorAll('.opt');
+  btns.forEach(b => {
+    b.addEventListener('click', () => checkAnswer(i, parseInt(b.dataset.idx), btns));
+  });
+
+  infoContainer.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function checkAnswer(planetIdx, chosen, btns) {
+  const p = planets[planetIdx];
+  const fb = document.getElementById(`fb-${planetIdx}`);
+  btns.forEach(o => o.disabled = true);
+
+  if (chosen === p.ans) {
+    btns[chosen].classList.add('correct');
+    score += 10;
+    fb.style.color = '#00e676';
+    fb.textContent = '✅ آفرین! +10 امتیاز';
+  } else {
+    btns[chosen].classList.add('wrong');
+    btns[p.ans].classList.add('correct');
+    fb.style.color = '#ff5252';
+    fb.textContent = '❌ پاسخ درست مشخص شد';
+  }
+  document.getElementById('score').textContent = score;
+}
+</script>
+</body>
+</html>
