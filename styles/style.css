@@ -877,6 +877,7 @@ footer {
     border-radius: 50px;
     font-style: italic;
     transition: all 0.3s ease;
+    z-index: 10000000;
 }
 
 .makers-link:hover{
