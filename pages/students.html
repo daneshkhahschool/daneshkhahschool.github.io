@@ -385,7 +385,11 @@
         function openModal(title) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalClass').textContent = 'کلاس ' + currentClass;
-            document.getElementById('modalBody').innerHTML = 'تصویر به‌زودی قرار می‌گیرد';
+            if (title === 'برنامه هفتگی') {
+                document.getElementById('modalBody').innerHTML = '<img src="../images/barnameh-haftegi.png" alt="برنامه هفتگی">';
+            } else {
+                document.getElementById('modalBody').innerHTML = 'تصویر به‌زودی قرار می‌گیرد';
+            }
             document.getElementById('infoModal').classList.add('open');
         }
 
