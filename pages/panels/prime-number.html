@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>بازی اعداد اول | دبیرستان شهید دانشخواه</title>
+<meta name="description" content="بازی آموزشی اعداد اول، غربال اراتستن و درخت تجزیه در وب‌سایت دبیرستان شهید دانشخواه.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://school.daneshkhah.workers.dev/pages/panels/prime-number">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:site_name" content="دبیرستان شهید دانشخواه">
+<meta property="og:title" content="بازی اعداد اول | دبیرستان شهید دانشخواه">
+<meta property="og:description" content="بازی آموزشی اعداد اول، غربال اراتستن و درخت تجزیه در وب‌سایت دبیرستان شهید دانشخواه.">
+<meta property="og:url" content="https://school.daneshkhah.workers.dev/pages/panels/prime-number">
+<meta property="og:image" content="https://school.daneshkhah.workers.dev/images/daneshkhah_icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="preload" href="../../fonts/Vazir.ttf" as="font" type="font/ttf" crossorigin>
+<style>
+@font-face{font-family:'Vazirmatn';src:url('../../fonts/Vazir.ttf') format('truetype');font-display:swap}
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f2f1fa; --panel:#ffffff; --ink:#1b1d3a; --muted:#6b6e92; --line:#c9c8e6;
+  --tile:#dedcf0; --tile-ink:#4a4d78; --accent:#5b4bff; --bad:#e5484d; --good:#12a36b;
+  --shadow:0 10px 30px rgba(50,45,120,.12);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1230; --panel:#171c44; --ink:#eef0ff; --muted:#9a9fd0; --line:#37408a;
+    --tile:#252b66; --tile-ink:#b9bdf0; --accent:#8b7dff; --bad:#ff6b70; --good:#35d39a;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1230; --panel:#171c44; --ink:#eef0ff; --muted:#9a9fd0; --line:#37408a;
+  --tile:#252b66; --tile-ink:#b9bdf0; --accent:#8b7dff; --bad:#ff6b70; --good:#35d39a;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Vazirmatn',Tahoma,sans-serif;line-height:1.6;transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit;color:inherit;touch-action:manipulation}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.app{max-width:760px;margin:0 auto;padding:16px 14px 32px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{margin:0;font-size:2rem;font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.ink{display:inline-flex;gap:1px;direction:ltr}
+.ink span:nth-child(1){color:#ff5d5d}.ink span:nth-child(2){color:#ffc83d}.ink span:nth-child(3){color:#2ecc71}.ink span:nth-child(4){color:#2f9bff}.ink span:nth-child(5){color:#a259ff}.ink span:nth-child(6){color:#ff8a3d}
+.sub{margin:6px 0 0;color:var(--muted);font-size:.9rem;max-width:34ch}
+.tools{display:flex;gap:8px}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:0;background:var(--panel);box-shadow:var(--shadow);font-size:1.05rem;cursor:pointer}
+
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--panel);padding:5px;border-radius:16px;margin:16px 0 10px;box-shadow:var(--shadow)}
+.tab{border:0;background:transparent;border-radius:12px;padding:9px 4px;font-weight:600;font-size:.92rem;cursor:pointer;color:var(--muted);transition:all .2s}
+.tab[aria-selected="true"]{background:var(--accent);color:#fff;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 45%,transparent)}
+.howto{margin:0 2px 12px;color:var(--muted);font-size:.88rem}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));gap:8px;margin-bottom:10px}
+.stat{background:var(--panel);border-radius:14px;padding:7px 6px;text-align:center;box-shadow:var(--shadow)}
+.stat small{display:block;color:var(--muted);font-size:.7rem}
+.stat b{font-size:1.05rem;font-weight:800}
+.heart{color:var(--bad);font-size:1.05rem;transition:opacity .3s}
+.heart.lost{opacity:.22}
+
+.readout{min-height:54px;background:var(--panel);border-radius:14px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;font-weight:600;box-shadow:var(--shadow)}
+.eq{display:inline-flex;direction:ltr;align-items:center;gap:7px;font-size:1.1rem}
+.eq .num{font-weight:800;font-size:1.25rem}
+.chip{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 6px;border-radius:50%;background:var(--c);color:var(--t);font-weight:800;animation:pop .3s ease}
+.x{color:var(--muted)}
+.combo{color:var(--accent);font-weight:800}
+.bad{color:var(--bad)}
+.good{color:var(--good)}
+
+.board{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(3px,1.3vw,9px);direction:ltr;background:var(--panel);padding:clamp(8px,2.5vw,18px);border-radius:22px;box-shadow:var(--shadow)}
+.tile{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:50%;background:var(--tile);color:var(--tile-ink);display:grid;place-items:center;font-weight:700;font-size:clamp(.6rem,2.5vw,1.05rem);cursor:pointer;transition:transform .12s,background .25s}
+.tile span{position:relative;z-index:1}
+.tile:active{transform:scale(.9)}
+.tile.prime{background:var(--c);color:var(--t);cursor:default;box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--c),0 0 16px var(--c);animation:pop .35s ease}
+.tile.comp{background:var(--pie);color:var(--ink);cursor:default;animation:spin .5s ease}
+.tile.comp::before{content:"";position:absolute;inset:24%;border-radius:50%;background:var(--panel)}
+.tile.comp span{font-size:.82em}
+.tile.one{background:var(--muted);color:var(--panel);cursor:default;animation:shake .35s}
+.tile.missed{background:transparent;box-shadow:inset 0 0 0 2px var(--c);color:var(--ink)}
+.tile.crossed{background:color-mix(in srgb,var(--c) 32%,var(--tile));color:color-mix(in srgb,var(--c) 55%,var(--muted));cursor:default;animation:cross .35s ease}
+.tile.hint{animation:hint .6s ease 3}
+.shake{animation:shake .35s}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes spin{0%{transform:rotate(-140deg) scale(.6)}100%{transform:rotate(0) scale(1)}}
+@keyframes cross{0%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes hint{50%{box-shadow:0 0 0 4px var(--accent),0 0 18px var(--accent);transform:scale(1.15)}}
+@keyframes shake{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+.split{background:var(--panel);border-radius:22px;padding:14px;box-shadow:var(--shadow)}
+.treescroll{overflow-x:auto;text-align:center;direction:ltr;min-height:210px;padding-bottom:6px}
+.treewrap{position:relative;display:inline-block;padding:10px 14px;text-align:center}
+.treewrap svg{position:absolute;top:0;left:0;pointer-events:none}
+.treewrap line{stroke:var(--line);stroke-width:2.5;stroke-linecap:round}
+.branch{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.kids{display:flex;gap:10px;margin-top:26px;align-items:flex-start}
+.node{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--tile);color:var(--tile-ink);animation:fade .3s ease}
+.node.gem{background:var(--c);color:var(--t);box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--c)}
+.node.active{outline:3px dashed var(--accent);outline-offset:3px;color:var(--ink)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.panel{margin-top:12px;border-top:2px dashed var(--line);padding-top:12px;text-align:center}
+.panel p{margin:0 0 10px;font-weight:600}
+.dbtns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.pbtn{min-width:52px;height:52px;border-radius:50%;border:0;background:var(--c);color:var(--t);font-weight:800;font-size:1.05rem;cursor:pointer;transition:transform .12s}
+.pbtn:active{transform:scale(.9)}
+.pbtn.ok{border-radius:26px;padding:0 20px;background:var(--accent);color:#fff;font-size:.95rem}
+
+.actions{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.btn{border:0;border-radius:14px;padding:11px 20px;font-weight:600;background:var(--panel);box-shadow:var(--shadow);cursor:pointer;font-size:.95rem}
+.btn.primary{background:var(--accent);color:#fff}
+
+.credit{margin-top:28px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;color:var(--muted);font-size:.85rem;font-weight:600}
+.credit .luck{text-align:left;direction:rtl;justify-self:end;white-space:nowrap}
+.credit .luck b{color:var(--accent);font-size:1.05em}
+.modal{position:fixed;inset:0;background:rgba(10,12,40,.55);display:grid;place-items:center;padding:20px;z-index:50}
+.card{background:var(--panel);border-radius:26px;padding:26px 22px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:pop .35s ease}
+.stars{font-size:2rem;letter-spacing:4px;color:#ffc83d;min-height:2.4rem}
+.card h2{margin:6px 0 8px;font-size:1.3rem}
+.card p{margin:0 0 18px;color:var(--muted);font-size:.95rem}
+.mbtns{display:flex;gap:10px;justify-content:center}
+.cf{position:fixed;left:50%;top:40%;width:9px;height:14px;border-radius:2px;z-index:60;pointer-events:none}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:420px){h1{font-size:1.65rem}.node{width:40px;height:40px;font-size:.9rem}.kids{gap:6px}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div>
+      <h1 class="ink" aria-label="PrimeR"><span>P</span><span>r</span><span>i</span><span>m</span><span>e</span><span>R</span></h1>
+      <p class="sub">هر عدد اول یک رنگ خالص است. بقیه‌ی اعداد ترکیبی از رنگ‌های اول‌هایشان‌اند.</p>
+    </div>
+    <div class="tools">
+      <button class="icon-btn" id="sndBtn" aria-label="صدا">🔊</button>
+      <button class="icon-btn" id="thmBtn" aria-label="تغییر تم">🌓</button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-mode="hunt" aria-selected="true">شکار اول‌ها</button>
+    <button class="tab" role="tab" data-mode="sieve" aria-selected="false">غربال</button>
+    <button class="tab" role="tab" data-mode="split" aria-selected="false">درخت تجزیه</button>
+  </nav>
+  <p class="howto" id="howto"></p>
+
+  <section class="stats" id="stats"></section>
+  <div class="readout" id="readout" aria-live="polite"></div>
+
+  <div class="board" id="board"></div>
+
+  <div class="split" id="splitArea" hidden>
+    <div class="treescroll"><div class="treewrap" id="treeWrap"></div></div>
+    <div class="panel" id="panel"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="hintBtn">💡 راهنما (۳)</button>
+    <button class="btn" id="restartBtn">↻ از نو</button>
+  </div>
+  <footer class="credit"><span></span><span>سازنده: رادین سرلک</span><span class="luck"><b>π</b>روز باشید</span></footer>
+</main>
+
+<div class="modal" id="modal" hidden>
+  <div class="card" role="dialog" aria-modal="true">
+    <div class="stars" id="mStars"></div>
+    <h2 id="mTitle"></h2>
+    <p id="mBody"></p>
+    <div class="mbtns">
+      <button class="btn primary" id="mAgain">دوباره</button>
+      <button class="btn" id="mClose">بستن</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const FA='۰۱۲۳۴۵۶۷۸۹';
+const fa=n=>String(n).replace(/\d/g,d=>FA[d]);
+const fmt=s=>fa(Math.floor(s/60))+':'+fa(String(s%60).padStart(2,'0'));
+function isPrime(n){if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true}
+function factorize(n){const f=[];for(let d=2;d*d<=n;d++){while(n%d===0){f.push(d);n/=d}}if(n>1)f.push(n);return f}
+
+const PR=[];for(let i=2;i<=400;i++)if(isPrime(i))PR.push(i);
+const BASE=['#ff5d5d','#2f9bff','#2ecc71','#ffc83d','#a259ff','#ff8a3d','#17c3b2','#ff5fa2','#9c6b4a','#8fd13f','#4b5bd6','#00b8d9'];
+const BASEFG=['#fff','#fff','#0d2b1a','#2a2200','#fff','#2b1500','#05302c','#fff','#fff','#1d2e08','#fff','#00303a'];
+const cache={};
+function pc(p){
+  if(cache[p])return cache[p];
+  const i=PR.indexOf(p);
+  if(i<BASE.length)return cache[p]={bg:BASE[i],fg:BASEFG[i]};
+  const h=Math.round((i*137.508+40)%360),l=42+(i%3)*8;
+  return cache[p]={bg:`hsl(${h},70%,${l}%)`,fg:(h>45&&h<200&&l>=50)?'#13152e':'#fff'};
+}
+const chip=p=>`<b class="chip" style="--c:${pc(p).bg};--t:${pc(p).fg}">${fa(p)}</b>`;
+function factorHTML(n){
+  const f=factorize(n);
+  if(f.length===1)return `<span class="eq">${chip(n)}</span><span class="good">اول است ✓</span>`;
+  return `<span class="eq"><span class="num">${fa(n)}</span><span class="x">=</span>${f.map(chip).join('<span class="x">×</span>')}</span>`;
+}
+function pie(f){
+  const step=100/f.length;
+  return 'conic-gradient('+f.map((p,i)=>{const a=i*step,b=(i+1)*step;return `${pc(p).bg} ${a}% ${b-1.2}%,var(--panel) ${b-1.2}% ${b}%`}).join(',')+')';
+}
+
+let audio=null,muted=false;
+function beep(freq,dur=.12,type='sine',vol=.05){
+  if(muted)return;
+  try{
+    audio=audio||new(window.AudioContext||window.webkitAudioContext)();
+    const o=audio.createOscillator(),g=audio.createGain();
+    o.type=type;o.frequency.value=freq;g.gain.value=vol;
+    o.connect(g);g.connect(audio.destination);
+    o.start();g.gain.exponentialRampToValueAtTime(.0001,audio.currentTime+dur);o.stop(audio.currentTime+dur);
+  }catch(e){}
+}
+const vib=()=>{try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}};
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  for(let i=0;i<48;i++){
+    const d=document.createElement('i');d.className='cf';d.style.background=pc(PR[i%PR.length]).bg;
+    document.body.appendChild(d);
+    const a=Math.random()*Math.PI*2,dist=120+Math.random()*220;
+    d.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:1},
+      {transform:`translate(calc(-50% + ${Math.cos(a)*dist}px),calc(-50% + ${Math.sin(a)*dist+120}px)) rotate(${Math.random()*720}deg) scale(.6)`,opacity:0}],
+      {duration:1100+Math.random()*600,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>d.remove();
+  }
+}
+function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+
+let epoch=0;
+function later(ms,fn){const e=epoch;return setTimeout(()=>{if(e===epoch)fn()},ms)}
+const board=$('#board'),readoutEl=$('#readout'),statsEl=$('#stats');
+const readout=h=>readoutEl.innerHTML=h;
+const setStats=a=>statsEl.innerHTML=a.map(([l,v])=>`<div class="stat"><small>${l}</small><b>${v}</b></div>`).join('');
+const tilesHTML=(shuffled)=>{
+  const a=[];for(let i=shuffled?1:2;i<=100;i++)a.push(i);
+  if(shuffled)for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+  return a.map(i=>`<button class="tile" data-n="${i}"><span>${fa(i)}</span></button>`).join('');
+};
+const tileEl=n=>board.querySelector(`.tile[data-n="${n}"]`);
+function shake(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}
+function showModal({stars,title,body,again}){
+  $('#mStars').textContent=stars===null?'':'★'.repeat(stars)+'☆'.repeat(3-stars);
+  $('#mTitle').textContent=title;$('#mBody').innerHTML=body;
+  $('#modal').hidden=false;
+  $('#mAgain').onclick=()=>{$('#modal').hidden=true;again()};
+}
+$('#mClose').onclick=()=>$('#modal').hidden=true;
+
+let mode='hunt',timer=null;
+
+let H=null;
+function huntStats(){
+  const t=H.t0?Math.floor((Date.now()-H.t0)/1000):0;
+  const hearts=[0,1,2].map(i=>`<span class="heart${i<H.lives?'':' lost'}">♥</span>`).join('');
+  setStats([['پیدا شده',`${fa(H.found)}/${fa(25)}`],['امتیاز',fa(H.score)],['زمان',fmt(t)],['جان',hearts]]);
+}
+function startHunt(){
+  epoch++;clearInterval(timer);
+  H={found:0,lives:3,combo:0,score:0,t0:0,done:false,hints:3};
+  hintLabel();
+  board.innerHTML=tilesHTML(true);huntStats();
+  readout('<span>روی یک عدد بزن. اگر اول نبود، به رنگ‌هایش می‌شکند.</span>');
+  timer=setInterval(()=>{if(mode==='hunt'&&H&&H.t0&&!H.done)huntStats()},500);
+}
+function huntTap(n,tile){
+  if(H.done||tile.classList.contains('prime')||tile.classList.contains('comp')||tile.classList.contains('one'))return;
+  if(!H.t0)H.t0=Date.now();
+  if(isPrime(n)){
+    const c=pc(n);tile.style.setProperty('--c',c.bg);tile.style.setProperty('--t',c.fg);
+    tile.classList.add('prime');
+    H.found++;H.combo++;
+    const gain=10+Math.min(H.combo,10)*2;H.score+=gain;
+    beep(380+Math.min(H.combo,12)*45,.14);
+    readout(factorHTML(n)+`<span class="x">+${fa(gain)}</span>`+(H.combo>=3?`<span class="combo">کمبو ×${fa(H.combo)}</span>`:''));
+    huntStats();
+    if(H.found===25)huntEnd(true);
+    else if(H.found%3===0)later(450,reshuffle);
+  }else{
+    H.lives--;H.combo=0;H.score=Math.max(0,H.score-15);
+    beep(150,.25,'square');vib();
+    if(n===1){
+      tile.classList.add('one');
+      readout('<span class="eq"><span class="num">۱</span></span><span class="bad">اول نیست؛ فقط یک مقسوم‌علیه دارد. −۱۵</span>');
+    }else{
+      tile.style.setProperty('--pie',pie(factorize(n)));tile.classList.add('comp');
+      readout(factorHTML(n)+'<span class="bad">اول نبود؛ −۱۵</span>');
+    }
+    huntStats();
+    if(H.lives===0)huntEnd(false);
+  }
+}
+function reshuffle(){
+  if(mode!=='hunt'||!H||H.done)return;
+  const all=[...board.children];
+  const free=all.filter(el=>!el.classList.contains('prime')&&!el.classList.contains('comp')&&!el.classList.contains('one'));
+  if(free.length<2)return;
+  const before=new Map(free.map(el=>[el,el.getBoundingClientRect()]));
+  const shuffled=free.slice();
+  for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}
+  const holes=free.map(el=>{const h=document.createComment('');el.replaceWith(h);return h});
+  holes.forEach((h,i)=>h.replaceWith(shuffled[i]));
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    free.forEach(el=>{
+      const a=before.get(el),b=el.getBoundingClientRect();
+      const dx=a.left-b.left,dy=a.top-b.top;
+      if(dx||dy)el.animate([{transform:`translate(${dx}px,${dy}px) scale(.85)`},{transform:'none'}],{duration:650,easing:'cubic-bezier(.2,.8,.2,1)'});
+    });
+  }
+  beep(260,.18,'triangle');
+  readout('<span class="combo">🔀 اعداد باقی‌مانده جابه‌جا شدند!</span>');
+}
+function huntEnd(win){
+  H.done=true;
+  const t=Math.floor((Date.now()-H.t0)/1000);
+  if(win){
+    confetti();[523,659,784,1047].forEach((f,i)=>later(i*110,()=>beep(f,.2)));
+    const best=store('rangadad.hunt'),isBest=!best||H.score>best.score;
+    if(isBest)store('rangadad.hunt',{score:H.score,time:t});
+    later(700,()=>showModal({stars:H.lives,title:'هر ۲۵ عدد اول را پیدا کردی!',
+      body:`امتیاز ${fa(H.score)} در ${fmt(t)}.<br>${isBest?'رکورد جدید ثبت شد 🏆':'رکورد شما: '+fa(best.score)}`,again:startHunt}));
+  }else{
+    board.querySelectorAll('.tile').forEach(el=>{
+      const n=+el.dataset.n;
+      if(isPrime(n)&&!el.classList.contains('prime')){el.style.setProperty('--c',pc(n).bg);el.classList.add('missed')}
+    });
+    later(900,()=>showModal({stars:0,title:'جان‌هایت تمام شد',
+      body:`${fa(H.found)} از ۲۵ عدد اول را پیدا کردی. اول‌های جامانده با حاشیه‌ی رنگی نشان داده شدند.`,again:startHunt}));
+  }
+}
+function hintLabel(){
+  const b=$('#hintBtn');
+  b.textContent=`💡 راهنما (${fa(H.hints)})`;
+  b.disabled=H.hints<=0;b.style.opacity=H.hints<=0?.5:1;
+}
+function hint(){
+  if(mode!=='hunt'||H.done||H.hints<=0)return;
+  const left=[...board.querySelectorAll('.tile')].filter(el=>isPrime(+el.dataset.n)&&!el.classList.contains('prime'));
+  if(!left.length)return;
+  const el=left[Math.floor(Math.random()*left.length)];
+  H.hints--;hintLabel();
+  readout(`<span>یکی از اول‌ها چشمک می‌زند. ${H.hints?fa(H.hints)+' راهنما باقی مانده.':'راهنماهایت تمام شد.'}</span>`);
+  el.classList.add('hint');setTimeout(()=>el.classList.remove('hint'),1900);
+}
+
+let S=null;
+function sieveStats(){
+  setStats([['اول‌های یافت‌شده',fa(board.querySelectorAll('.prime').length)],['خط‌خورده',fa(board.querySelectorAll('.crossed').length)],['خطا',fa(S.wrong)]]);
+}
+function smallestFree(){let s=2;while(S.crossed.has(s)||S.primes.includes(s))s++;return s}
+function markPrime(n){const c=pc(n),t=tileEl(n);t.style.setProperty('--c',c.bg);t.style.setProperty('--t',c.fg);t.classList.add('prime')}
+function startSieve(){
+  epoch++;clearInterval(timer);
+  S={primes:[],crossed:new Map(),wrong:0,busy:false,done:false};
+  board.innerHTML=tilesHTML();sieveStats();
+  readout('<span>از کوچک‌ترین عدد شروع کن.</span>');
+}
+function sieveTap(n){
+  if(S.done||S.busy||S.crossed.has(n)||S.primes.includes(n))return;
+  if(n!==smallestFree()){
+    S.wrong++;shake(tileEl(n));beep(150,.25,'square');vib();
+    readout('<span class="bad">هنوز نه! باید کوچک‌ترین عدد خط‌نخورده را انتخاب کنی.</span>');
+    sieveStats();return;
+  }
+  S.primes.push(n);markPrime(n);beep(520,.15);
+  const ms=[];for(let m=2*n;m<=100;m+=n)if(!S.crossed.has(m))ms.push(m);
+  S.busy=true;
+  ms.forEach((m,i)=>{
+    S.crossed.set(m,n);
+    later(i*55,()=>{const t=tileEl(m);t.style.setProperty('--c',pc(n).bg);t.classList.add('crossed');beep(300+i*12,.05,'sine',.025);sieveStats()});
+  });
+  readout(`<span class="eq">${chip(n)}</span><span>اول است؛ مضرب‌هایش خط خوردند.</span>`);
+  sieveStats();
+  later(ms.length*55+150,()=>{
+    S.busy=false;
+    const s=smallestFree();
+    if(s*s>100)finishSieve(s);
+  });
+}
+function finishSieve(s){
+  S.busy=true;
+  readout(`<span>کوچک‌ترین عدد خط‌نخورده ${fa(s)} است و ${fa(s)}×${fa(s)}=${fa(s*s)} از ۱۰۰ بیشتر است. پس همه‌ی بقیه اولند!</span>`);
+  const rest=[];for(let i=2;i<=100;i++)if(!S.crossed.has(i)&&!S.primes.includes(i))rest.push(i);
+  rest.forEach((n,i)=>later(500+i*70,()=>{markPrime(n);beep(400+i*25,.08,'sine',.03);sieveStats()}));
+  later(500+rest.length*70+300,()=>{
+    S.done=true;confetti();
+    const st=S.wrong===0?3:S.wrong<=2?2:1;
+    showModal({stars:st,title:'غربال کامل شد!',
+      body:`فقط با غربال کردن ${S.primes.map(fa).join('، ')} همه‌ی ۲۵ عدد اول تا ۱۰۰ پیدا شدند. این روش را اراتستن، ریاضی‌دان یونانی، حدود ۲۲۰۰ سال پیش ساخت.`,again:startSieve});
+  });
+}
+
+let T=null;
+const DIVS=[2,3,5,7,11,13];
+const RANGES=[[6,30],[20,60],[40,100],[60,150],[100,200]];
+function splitStats(){setStats([['دور',`${fa(T.round)}/${fa(5)}`],['امتیاز',fa(T.score)],['خطای این دور',fa(T.wrong)]])}
+function pickNumber(r){
+  const [a,b]=RANGES[r-1];let n;
+  do{n=a+Math.floor(Math.random()*(b-a+1))}while(isPrime(n)||(r>=3&&factorize(n).length<3));
+  return n;
+}
+function startSplit(){
+  epoch++;clearInterval(timer);
+  T={round:0,score:0,wrong:0,done:false,roundDone:false,root:null,cur:null,nextId:1,t0:0};
+  newRound();
+}
+function newRound(){
+  T.round++;T.wrong=0;T.roundDone=false;T.t0=Date.now();T.nextId=1;
+  T.root={id:0,n:pickNumber(T.round),kids:null,locked:false};T.cur=T.root;
+  splitStats();renderTree();renderPanel();
+  readout('<span>این عدد را تا آخرین عوامل اول بشکن.</span>');
+}
+function branch(node){
+  const b=document.createElement('div');b.className='branch';
+  const n=document.createElement('div');n.className='node';n.dataset.id=node.id;
+  if(node.parent!==undefined)n.dataset.parent=node.parent;
+  n.textContent=fa(node.n);
+  if(node.locked){const c=pc(node.n);n.classList.add('gem');n.style.setProperty('--c',c.bg);n.style.setProperty('--t',c.fg)}
+  else if(node===T.cur&&!T.roundDone)n.classList.add('active');
+  b.appendChild(n);
+  if(node.kids){const k=document.createElement('div');k.className='kids';node.kids.forEach(c=>k.appendChild(branch(c)));b.appendChild(k)}
+  return b;
+}
+function renderTree(){
+  const w=$('#treeWrap');w.innerHTML='';w.appendChild(branch(T.root));
+  requestAnimationFrame(drawLines);
+}
+function drawLines(){
+  const w=$('#treeWrap');if(!w)return;
+  const old=w.querySelector('svg');if(old)old.remove();
+  const NS='http://www.w3.org/2000/svg',svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('width',w.scrollWidth);svg.setAttribute('height',w.scrollHeight);
+  const wr=w.getBoundingClientRect();
+  w.querySelectorAll('.node[data-parent]').forEach(ch=>{
+    const p=w.querySelector(`.node[data-id="${ch.dataset.parent}"]`);if(!p)return;
+    const a=p.getBoundingClientRect(),b=ch.getBoundingClientRect(),l=document.createElementNS(NS,'line');
+    l.setAttribute('x1',a.left+a.width/2-wr.left);l.setAttribute('y1',a.bottom-wr.top);
+    l.setAttribute('x2',b.left+b.width/2-wr.left);l.setAttribute('y2',b.top-wr.top);
+    svg.appendChild(l);
+  });
+  w.prepend(svg);
+}
+function renderPanel(){
+  const p=$('#panel');
+  if(T.roundDone){
+    p.innerHTML=`<button class="pbtn ok" data-act="next">${T.round===5?'پایان ✓':'دور بعد ←'}</button>`;return;
+  }
+  p.innerHTML=`<p>${fa(T.cur.n)} را بر کدام عدد اول تقسیم می‌کنی؟</p><div class="dbtns">`+
+    DIVS.map(d=>`<button class="pbtn" data-d="${d}" style="--c:${pc(d).bg};--t:${pc(d).fg}">${fa(d)}</button>`).join('')+
+    `<button class="pbtn ok" data-d="prime">خودش اول است ✓</button></div>`;
+}
+function splitWrong(msg){
+  T.wrong++;beep(150,.25,'square');vib();shake($('#panel'));
+  readout(`<span class="bad">${msg}</span>`);splitStats();
+}
+function splitPress(v){
+  if(T.roundDone)return;
+  const c=T.cur;
+  if(v==='prime'){
+    if(!isPrime(c.n))return splitWrong(`${fa(c.n)} اول نیست؛ مقسوم‌علیه دارد.`);
+    c.locked=true;endRound();return;
+  }
+  if(c.n===v)return splitWrong(`${fa(c.n)} خودش اول است؛ دکمه‌ی «خودش اول است» را بزن.`);
+  if(c.n%v!==0)return splitWrong(`${fa(c.n)} بر ${fa(v)} بخش‌پذیر نیست.`);
+  c.kids=[{id:T.nextId++,n:v,locked:true,parent:c.id,kids:null},{id:T.nextId++,n:c.n/v,locked:false,parent:c.id,kids:null}];
+  T.cur=c.kids[1];beep(440+v*8,.12);
+  readout(`<span class="eq"><span class="num">${fa(c.n)}</span><span class="x">=</span>${chip(v)}<span class="x">×</span><span class="num">${fa(c.n/v)}</span></span>`);
+  renderTree();renderPanel();
+}
+function endRound(){
+  T.roundDone=true;
+  const secs=Math.floor((Date.now()-T.t0)/1000);
+  const pts=Math.max(20,100-T.wrong*25-Math.floor(secs/2));
+  T.score+=pts;
+  [523,659,784].forEach((f,i)=>later(i*100,()=>beep(f,.18)));
+  readout(factorHTML(T.root.n)+`<span class="good">+${fa(pts)}</span>`);
+  splitStats();renderTree();renderPanel();
+  if(T.round===5){
+    T.done=true;
+    const st=T.score>=420?3:T.score>=320?2:1;
+    const best=store('rangadad.split'),isBest=!best||T.score>best;
+    if(isBest)store('rangadad.split',T.score);
+    confetti();
+    later(900,()=>showModal({stars:st,title:'هر ۵ درخت کامل شد!',
+      body:`امتیاز ${fa(T.score)} از ۵۰۰.<br>${isBest?'رکورد جدید ثبت شد 🏆':'رکورد شما: '+fa(best)}`,again:startSplit}));
+  }
+}
+
+const HOW={
+  hunt:'اعداد ۱ تا ۱۰۰ درهم‌ریخته‌اند. فقط اول‌ها را لمس کن؛ اگر عدد اول نبود، یک جان از دست می‌دهی. با هر ۳ اول درست، بقیه‌ی اعداد جابه‌جا می‌شوند!',
+  sieve:'غربال اراتستن: کوچک‌ترین عدد خط‌نخورده را بزن تا مضرب‌هایش خط بخورند. آنچه می‌ماند اول است.',
+  split:'عدد را با تقسیم بر اول‌ها بشکن تا فقط عوامل اول بمانند. وقتی به عدد اول رسیدی تأییدش کن.'
+};
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.mode===m));
+  $('#howto').textContent=HOW[m];
+  const isSplit=m==='split';
+  board.hidden=isSplit;$('#splitArea').hidden=!isSplit;
+  $('#hintBtn').hidden=m!=='hunt';
+  $('#modal').hidden=true;
+  ({hunt:startHunt,sieve:startSieve,split:startSplit})[m]();
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setMode(t.dataset.mode)));
+board.addEventListener('click',e=>{
+  const t=e.target.closest('.tile');if(!t)return;
+  const n=+t.dataset.n;
+  if(mode==='hunt')huntTap(n,t);else if(mode==='sieve')sieveTap(n);
+});
+$('#panel').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.act==='next'){if(!T.done)newRound();return}
+  if(b.dataset.d)splitPress(b.dataset.d==='prime'?'prime':+b.dataset.d);
+});
+$('#hintBtn').addEventListener('click',hint);
+$('#restartBtn').addEventListener('click',()=>setMode(mode));
+$('#sndBtn').addEventListener('click',e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'});
+$('#thmBtn').addEventListener('click',()=>{
+  const r=document.documentElement;
+  const cur=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  r.dataset.theme=cur==='dark'?'light':'dark';
+  if(mode==='split'&&T)requestAnimationFrame(drawLines);
+});
+window.addEventListener('resize',()=>{if(mode==='split'&&T)drawLines()});
+
+setMode('hunt');
+})();
+</script>
+</body>
+</html>

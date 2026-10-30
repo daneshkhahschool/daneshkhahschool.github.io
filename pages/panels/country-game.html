@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>بازی کشورها | دبیرستان شهید دانشخواه</title>
+<meta name="description" content="کاوشگر کشورها؛ نقشه، پرچم، پایتخت و آزمون جغرافیا در وب‌سایت دبیرستان شهید دانشخواه.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://school.daneshkhah.workers.dev/pages/panels/country-game">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:site_name" content="دبیرستان شهید دانشخواه">
+<meta property="og:title" content="بازی کشورها | دبیرستان شهید دانشخواه">
+<meta property="og:description" content="کاوشگر کشورها؛ نقشه، پرچم، پایتخت و آزمون جغرافیا در وب‌سایت دبیرستان شهید دانشخواه.">
+<meta property="og:url" content="https://school.daneshkhah.workers.dev/pages/panels/country-game">
+<meta property="og:image" content="https://school.daneshkhah.workers.dev/images/daneshkhah_icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="preload" href="../../fonts/Vazir.ttf" as="font" type="font/ttf" crossorigin>
+<style>
+@font-face{font-family:'Vazirmatn';src:url('../../fonts/Vazir.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Twemoji Country Flags';unicode-range:U+1F1E6-1F1FF,U+1F3F4,U+E0062-E0063,U+E0065,U+E0067,U+E006C,U+E006E,U+E0073-E0074,U+E0077,U+E007F;src:url('../../fonts/TwemojiCountryFlags.woff2') format('woff2');font-display:swap}
+:root{
+  --bg:#0a1024;--bg2:#131b3f;--ink:#eaf0ff;--mute:#9aa8d6;--line:rgba(255,255,255,.12);
+  --teal:#2de2c8;--violet:#9b8cff;--amber:#ffb53d;--coral:#ff6b81;--lime:#bfe35a;--sky:#4cc9f0;--ac:#ffb53d;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;color:var(--ink);overflow-x:hidden;
+  font-family:'Twemoji Country Flags','Vazirmatn',Tahoma,'Segoe UI',sans-serif;line-height:1.8;
+  background:radial-gradient(1200px 700px at 85% -10%,#24306e 0%,transparent 60%),radial-gradient(900px 600px at 0% 100%,#103a4a 0%,transparent 55%),var(--bg)}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:60;pointer-events:none}
+.app{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 14px 70px}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--ac,var(--teal));outline-offset:2px}
+
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:12px 0;
+  background:linear-gradient(var(--bg) 70%,transparent)}
+.back{border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--ink);width:42px;height:42px;border-radius:14px;font-size:20px;cursor:pointer;transition:.2s}
+.back:hover{background:rgba(255,255,255,.18)}
+.brand{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand svg{width:26px;height:26px}
+.xp{margin-inline-start:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--mute)}
+.lvl{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:17px;color:#0a1024;
+  background:conic-gradient(var(--amber),var(--coral),var(--violet),var(--teal),var(--amber))}
+.xpcol{display:flex;flex-direction:column;gap:2px;min-width:92px}
+.xpcol b{color:var(--ink);font-size:12px}
+.bar{height:6px;border-radius:9px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--teal),var(--amber));transition:width .6s}
+
+.view{display:block}
+.back{display:grid;place-items:center;text-decoration:none}
+
+.panel{background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:22px;padding:16px;margin-bottom:14px}
+.panel h3{margin:0 0 10px;font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.btn{font:inherit;font-size:14px;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--ink);padding:9px 14px;border-radius:13px;transition:.2s}
+.btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.16)}
+.btn.pri{background:var(--ac);color:#06101f;font-weight:800;border-color:transparent}
+.btn.pri:hover{filter:brightness(1.1)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tabs{display:flex;gap:6px;margin-bottom:14px;padding:5px;border-radius:16px;background:rgba(255,255,255,.07);width:fit-content;max-width:100%;overflow-x:auto}
+.tab{border:0;background:transparent;color:var(--mute);font:inherit;font-size:14px;padding:8px 16px;border-radius:12px;cursor:pointer;white-space:nowrap;transition:.2s}
+.tab.on{background:var(--ac);color:#06101f;font-weight:800}
+.pane{display:none}.pane.on{display:block;animation:enter .35s}
+.chip{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13px;padding:5px 12px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--ac)}
+.chip.on{background:var(--ac);color:#06101f;border-color:transparent;font-weight:600}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,40px);opacity:0;z-index:70;padding:10px 18px;border-radius:14px;
+  background:#fff;color:#0a1024;font-weight:800;font-size:14px;transition:.35s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+sub{font-size:.65em;line-height:0}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+
+#map{display:block;width:100%;border-radius:20px;cursor:crosshair;background:linear-gradient(180deg,#0b2a4a,#08182f);touch-action:manipulation}
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;max-height:260px;overflow:auto;padding:2px}
+.gc{display:flex;align-items:center;gap:8px;font:inherit;font-size:13px;text-align:right;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);border-radius:12px;padding:6px 10px;cursor:pointer;transition:.18s}
+.gc:hover,.gc.on{border-color:var(--amber);background:rgba(255,181,61,.14)}
+.gc.seen::after{content:"✓";margin-inline-start:auto;color:var(--lime);font-weight:800}
+.gc .fl{font-size:20px}
+.ginfo{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.ginfo .bigf{font-size:70px;line-height:1;animation:pop .4s}
+@media(max-width:480px){.ginfo{grid-template-columns:1fr;text-align:center}}
+.ginfo h4{margin:0;font-size:26px}
+.prog{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mute);margin:10px 0}
+.prog .bar{flex:1}
+
+.quiz{max-width:640px;margin:0 auto}
+.qbar{height:8px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:8px}
+.qbar i{display:block;height:100%;background:var(--ac);border-radius:9px;transition:width .5s}
+.qmeta{display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}
+.qtext{font-size:20px;margin:10px 0 12px;line-height:1.7}
+.qbig{font-size:84px;text-align:center;line-height:1.2;animation:pop .4s}
+.opts{display:grid;gap:8px}
+.opt{font:inherit;font-size:16px;text-align:right;padding:12px 16px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--ink);cursor:pointer;transition:.18s}
+.opt:hover:not(:disabled){border-color:var(--ac);transform:translateX(-4px)}
+.opt.good{background:rgba(120,230,140,.22);border-color:#78e68c}
+.opt.badc{background:rgba(255,107,129,.2);border-color:var(--coral);animation:shake .4s}
+.opt:disabled{cursor:default}
+.why{margin:12px 0;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.07);font-size:14px;color:var(--mute);animation:pop .3s}
+.why[hidden],.next[hidden]{display:none}
+.qend{text-align:center;padding:10px}
+.qend .stars{font-size:46px;letter-spacing:6px}
+.qend h3{font-size:26px;margin:6px 0}
+
+.vhead{margin:4px 0 14px}.vhead h2{margin:0;font-size:24px;font-weight:800}.vhead p{margin:4px 0 0;color:var(--mute);font-size:14px}
+button,.tab,.chip,.opt,.el,.gc{touch-action:manipulation}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pop{from{transform:scale(.88);opacity:0}to{transform:none;opacity:1}}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.pchips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.fact{border-inline-start:3px solid var(--violet);padding:4px 12px;margin-top:10px;font-size:14px;background:rgba(155,140,255,.1);border-radius:6px 12px 12px 6px}
+.kv{display:grid;grid-template-columns:repeat(2,auto);gap:2px 16px;font-size:13px;color:var(--mute);justify-content:start;margin:6px 0}.kv b{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="app">
+  <header class="top">
+    <a class="back" href="../learn.html" aria-label="بازگشت">→</a>
+    <div class="brand">آزمایشگاه دانش</div>
+    <div class="xp">
+      <div class="xpcol"><b id="ttl">نوآموز کنجکاو</b><div class="bar"><i id="xpfill"></i></div><span id="xpn">۰ امتیاز</span></div>
+      <div class="lvl" id="lvl" title="سطح">۱</div>
+    </div>
+  </header>
+  <section id="geo" class="view active">
+    <div class="vhead"><h2>کاوشگر کشورها</h2><p>روی یک نقطهٔ رنگی بزن یا از فهرست انتخاب کن. نقشه ساده‌شده است.</p></div>
+    <div class="tabs" id="geTabs">
+      <button class="tab on" data-t="map">نقشه</button>
+      <button class="tab" data-t="qz">آزمون</button>
+    </div>
+    <div class="pane on" id="ge-map">
+      <canvas id="map"></canvas>
+      <div class="prog"><span id="gprog"></span><div class="bar"><i id="gbar"></i></div></div>
+      <div class="pchips" id="gchips"></div>
+      <div class="panel" id="ginfo"></div>
+      <div class="panel"><h3>فهرست کشورها <span id="gcount" style="font-size:12px;color:var(--mute);font-weight:400"></span></h3><div class="gl" id="glist"></div></div>
+    </div>
+    <div class="pane" id="ge-qz"><div class="panel" id="geQuiz"></div></div>
+  </section>
+</div>
+<script>
+'use strict';
+
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const FA='۰۱۲۳۴۵۶۷۸۹';
+const fa=s=>String(s).replace(/\d/g,d=>FA[d]);
+const num=n=>fa(Number(n).toLocaleString('en-US')).replace(/,/g,'٬');
+const dec=n=>fa(String(n)).replace('.','٫');
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const sub=f=>f.replace(/(\d+)/g,'<sub>$1</sub>');
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const DPR=Math.min(window.devicePixelRatio||1,2);
+const store={
+  get(k,d){try{const v=localStorage.getItem('adn_'+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('adn_'+k,JSON.stringify(v))}catch(e){}}
+};
+const S={xp:store.get('xp',0),found:store.get('found',[]),seen:store.get('seen',[])};
+let current='hub';
+
+let toastT;
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),1800)}
+const TITLES=['نوآموز کنجکاو','کاوشگر','آزمایشگر','پژوهنده','دانشمند جوان','نابغهٔ علوم'];
+function renderXP(){
+  const lv=Math.floor(S.xp/100)+1;
+  $('#lvl').textContent=fa(lv);
+  $('#ttl').textContent=TITLES[Math.min(lv-1,TITLES.length-1)];
+  $('#xpfill').style.width=(S.xp%100)+'%';
+  $('#xpn').textContent=fa(S.xp)+' امتیاز';
+}
+function addXP(n){
+  if(!n)return;
+  const before=Math.floor(S.xp/100);
+  S.xp=Math.max(0,S.xp+n);store.set('xp',S.xp);renderXP();
+  if(Math.floor(S.xp/100)>before&&n>0){confetti();toast('🎉 سطح جدید: '+TITLES[Math.min(Math.floor(S.xp/100),TITLES.length-1)])}
+  else toast((n>0?'+':'−')+fa(Math.abs(n))+' امتیاز');
+}
+const fx=$('#fx'),fctx=fx.getContext('2d');let parts=[],fxOn=false;
+function sizeFx(){fx.width=innerWidth;fx.height=innerHeight}
+addEventListener('resize',sizeFx);sizeFx();
+function confetti(x=innerWidth/2,y=innerHeight/3,n=90){
+  if(RM)return;
+  const cols=['#2de2c8','#ffb53d','#ff6b81','#9b8cff','#bfe35a','#4cc9f0'];
+  for(let i=0;i<n;i++)parts.push({x,y,vx:(Math.random()-.5)*11,vy:Math.random()*-10-2,g:.3,r:3+Math.random()*4,c:rnd(cols),life:80+Math.random()*40,rot:Math.random()*6,vr:(Math.random()-.5)*.4});
+  if(!fxOn){fxOn=true;requestAnimationFrame(fxLoop)}
+}
+function fxLoop(){
+  fctx.clearRect(0,0,fx.width,fx.height);
+  parts=parts.filter(p=>p.life>0);
+  for(const p of parts){p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.life--;p.rot+=p.vr;
+    fctx.save();fctx.translate(p.x,p.y);fctx.rotate(p.rot);fctx.globalAlpha=Math.min(1,p.life/30);fctx.fillStyle=p.c;fctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);fctx.restore()}
+  if(parts.length)requestAnimationFrame(fxLoop);else fxOn=false;
+}
+
+(function(){
+  const c=$('#bg'),x=c.getContext('2d');let W,H,st=[];
+  function size(){W=c.width=innerWidth;H=c.height=innerHeight;st=Array.from({length:Math.round(W*H/9000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.2,p:Math.random()*6,s:Math.random()*.15+.03}))}
+  function draw(t){
+    x.clearRect(0,0,W,H);
+    for(const s of st){
+      const a=.35+.65*Math.abs(Math.sin(s.p+t/1200*s.s*8));
+      x.globalAlpha=a;x.fillStyle='#fff';x.beginPath();x.arc(s.x,s.y,s.r,0,6.3);x.fill();
+      if(!RM){s.y+=s.s*.3;if(s.y>H)s.y=0}
+    }
+    if(!RM)requestAnimationFrame(draw);
+  }
+  addEventListener('resize',size);size();requestAnimationFrame(draw);
+})();
+
+current='geo';
+function tabs(root,prefix,onSwitch){
+  $$('.tab',root).forEach(b=>b.onclick=()=>{
+    $$('.tab',root).forEach(x=>x.classList.toggle('on',x===b));
+    $$('.pane[id^="'+prefix+'"]').forEach(p=>p.classList.toggle('on',p.id===prefix+b.dataset.t));
+    onSwitch(b.dataset.t);
+  });
+}
+
+function mkQ(q,correct,wrong,why,big){
+  const opts=shuffle([correct,...wrong.slice(0,3)]);
+  return {q,opts,a:opts.indexOf(correct),why,big};
+}
+function runQuiz(root,gen,accent){
+  let Q=gen(),i=0,score=0,streak=0,ok=0,locked=false;
+  function render(){
+    if(i>=Q.length)return end();
+    const q=Q[i];
+    root.innerHTML=`<div class="quiz" style="--ac:${accent}">
+      <div class="qbar"><i style="width:${i/Q.length*100}%"></i></div>
+      <div class="qmeta"><span>سؤال ${fa(i+1)} از ${fa(Q.length)}</span><span>${streak>1?'🔥 '+fa(streak)+' پشت‌سرهم':''}</span></div>
+      ${q.big?`<div class="qbig">${q.big}</div>`:''}
+      <h3 class="qtext">${q.q}</h3>
+      <div class="opts">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join('')}</div>
+      <div class="why" hidden></div>
+      <button class="btn pri next" hidden>${i===Q.length-1?'دیدن نتیجه':'سؤال بعدی'}</button>
+    </div>`;
+    locked=false;
+    $$('.opt',root).forEach(b=>b.onclick=()=>pick(+b.dataset.k));
+    $('.next',root).onclick=()=>{i++;render()};
+  }
+  function pick(k){
+    if(locked)return;locked=true;
+    const q=Q[i],good=k===q.a,bs=$$('.opt',root);
+    bs.forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add('good');else if(n===k)b.classList.add('badc')});
+    if(good){ok++;streak++;const g=5+Math.min(streak-1,5);score+=g;addXP(g)}else{streak=0}
+    const w=$('.why',root);w.hidden=false;w.innerHTML=(good?'✅ درست! ':'❌ پاسخ درست: <b>'+q.opts[q.a]+'</b>. ')+(q.why||'');
+    $('.next',root).hidden=false;
+    $('.next',root).focus({preventScroll:true});
+  }
+  function end(){
+    const r=ok/Q.length,st=r>=.85?3:r>=.6?2:r>=.3?1:0;
+    if(st>=2)confetti();
+    root.innerHTML=`<div class="qend" style="--ac:${accent}">
+      <div class="stars">${'⭐'.repeat(st)}${'☆'.repeat(3-st)}</div>
+      <h3>${fa(ok)} از ${fa(Q.length)} پاسخ درست</h3>
+      <p style="color:var(--mute)">${st===3?'عالی بود! واقعاً کاوشگر ماهری هستی.':st===2?'خیلی خوب! یک دور دیگر و کامل می‌شود.':st===1?'شروع خوبی بود. اطلاعات را مرور کن و دوباره امتحان کن.':'اشکالی ندارد؛ با کاوش بیشتر دفعهٔ بعد بهتر می‌شوی.'}</p>
+      <button class="btn pri" id="again" style="--ac:${accent}">دوباره بازی کن</button></div>`;
+    $('#again',root).onclick=()=>{Q=gen();i=0;score=0;streak=0;ok=0;render()};
+  }
+  render();
+}
+
+const CONT={as:['آسیا','#ffb53d'],eu:['اروپا','#6f9bff'],af:['آفریقا','#ff6b81'],na:['آمریکای شمالی','#2de2c8'],sa:['آمریکای جنوبی','#bfe35a'],oc:['اقیانوسیه','#c084fc']};
+const flag=cc=>String.fromCodePoint(...[...cc].map(c=>127397+c.charCodeAt(0)));
+const CO=[
+ ['IR','ایران','تهران','as',89,'فارسی','ریال',35.7,51.4,'در این کشور قلهٔ دماوند، بلندترین کوه آتشفشانی آسیا (۵٬۶۱۰ متر)، قرار دارد.'],
+ ['TR','ترکیه','آنکارا','as',85,'ترکی','لیر',39.9,32.9,'شهر استانبول در آن روی دو قاره، آسیا و اروپا، گسترده شده است.',1],
+ ['EG','مصر','قاهره','af',114,'عربی','پوند مصر',30.0,31.2,'اهرام جیزه و رود نیل از نشانه‌های یکی از کهن‌ترین تمدن‌های جهان در آن‌اند.'],
+ ['SA','عربستان سعودی','ریاض','as',33,'عربی','ریال سعودی',24.7,46.7,'بزرگ‌ترین کشور شبه‌جزیرهٔ عربستان و میزبان شهرهای مکه و مدینه است.'],
+ ['IN','هند','دهلی نو','as',1430,'هندی و انگلیسی','روپیه هند',28.6,77.2,'از سال ۲۰۲۳ پرجمعیت‌ترین کشور جهان شده است.'],
+ ['CN','چین','پکن','as',1410,'چینی (ماندارین)','یوان',39.9,116.4,'دیوار بزرگ بیش از ۲۰ هزار کیلومتر طول دارد؛ کاغذ و قطب‌نما در آن اختراع شد.'],
+ ['JP','ژاپن','توکیو','as',124,'ژاپنی','ین',35.7,139.7,'بیش از ۶٬۸۰۰ جزیره دارد و قطار سریع‌السیر «شینکانسن» در آن می‌دود.'],
+ ['KR','کرهٔ جنوبی','سئول','as',52,'کره‌ای','وون',37.6,127.0,'خط هانگول، یکی از ساده‌ترین خط‌های جهان، در قرن پانزدهم میلادی در آن ساخته شد.'],
+ ['RU','روسیه','مسکو','as',144,'روسی','روبل',55.8,37.6,'بزرگ‌ترین کشور جهان از نظر مساحت است و ۱۱ منطقهٔ زمانی دارد.',1],
+ ['DE','آلمان','برلین','eu',84,'آلمانی','یورو',52.5,13.4,'دیوار معروفی که پایتختش را دو نیم می‌کرد در سال ۱۹۸۹ فروریخت.'],
+ ['FR','فرانسه','پاریس','eu',68,'فرانسوی','یورو',48.9,2.35,'برج ایفل (۳۳۰ متر) و موزهٔ لوور، پربازدیدترین موزهٔ جهان، در آن‌اند.'],
+ ['IT','ایتالیا','رم','eu',59,'ایتالیایی','یورو',41.9,12.5,'کوچک‌ترین کشور جهان (واتیکان) درون پایتخت آن قرار دارد؛ خاستگاه امپراتوری روم.'],
+ ['ES','اسپانیا','مادرید','eu',48,'اسپانیایی','یورو',40.4,-3.7,'خانهٔ آثار معمار گائودی و جشن گوجه‌فرنگی «لاتوماتینا» است.'],
+ ['GB','بریتانیا','لندن','eu',69,'انگلیسی','پوند استرلینگ',51.5,-0.1,'نصف‌النهار گرینویچ، مبدأ طول جغرافیایی (صفر درجه)، از آن می‌گذرد.'],
+ ['BR','برزیل','برازیلیا','sa',213,'پرتغالی','رئال',-15.8,-47.9,'بزرگ‌ترین بخش جنگل بارانی آمازون در آن است.'],
+ ['AR','آرژانتین','بوئنوس‌آیرس','sa',46,'اسپانیایی','پزو آرژانتین',-34.6,-58.4,'قلهٔ آکونکاگوا، بلندترین قله در بیرون از آسیا (۶٬۹۶۱ متر)، در آن قرار دارد.'],
+ ['CA','کانادا','اتاوا','na',40,'انگلیسی و فرانسوی','دلار کانادا',45.4,-75.7,'طولانی‌ترین خط ساحلی جهان را دارد و دومین کشور بزرگ جهان است.'],
+ ['US','ایالات متحده','واشینگتن دی‌سی','na',340,'انگلیسی','دلار آمریکا',38.9,-77.0,'از ۵۰ ایالت ساخته شده و نخستین انسان‌ها از آنجا به ماه سفر کردند.'],
+ ['MX','مکزیک','مکزیکوسیتی','na',129,'اسپانیایی','پزو مکزیک',19.4,-99.1,'خاستگاه تمدن‌های مایا و آزتک و هرم‌های چیچن‌ایتزا است.'],
+ ['AU','استرالیا','کانبرا','oc',27,'انگلیسی','دلار استرالیا',-35.3,149.1,'هم کشور است هم قاره؛ خانهٔ کانگورو و صخرهٔ بزرگ مرجانی.'],
+ ['NZ','نیوزیلند','ولینگتون','oc',5.2,'انگلیسی و مائوری','دلار نیوزیلند',-41.3,174.8,'تعداد گوسفندهایش بیشتر از جمعیت انسانی‌اش است و از نخستین جاهایی است که سال نو را جشن می‌گیرند.'],
+ ['ZA','آفریقای جنوبی','پرتوریا','af',63,'۱۲ زبان رسمی (مثل زولو)','رند',-25.7,28.2,'سه پایتخت دارد: اجرایی، قانون‌گذاری و قضایی.'],
+ ['NG','نیجریه','ابوجا','af',224,'انگلیسی','نایرا',9.1,7.5,'پرجمعیت‌ترین کشور آفریقاست.'],
+ ['KE','کنیا','نایروبی','af',55,'سواحیلی و انگلیسی','شیلینگ کنیا',-1.3,36.8,'مهاجرت بزرگ میلیون‌ها گاومیش وحشی (ویلدبیست) در دشت ماسای‌مارا هر سال آنجا رخ می‌دهد.'],
+ ['MA','مراکش','رباط','af',37,'عربی و امازیغی','درهم',34.0,-6.8,'دانشگاه قرویین (۸۵۹ میلادی)، از قدیمی‌ترین دانشگاه‌های جهان، در شهر فاس آن است.'],
+ ['ET','اتیوپی','آدیس‌آبابا','af',126,'آمهری','بیر',9.0,38.7,'خاستگاه افسانه‌ای قهوه است و تقویمی با ۱۳ ماه دارد.'],
+ ['ID','اندونزی','جاکارتا','as',278,'اندونزیایی','روپیه اندونزی',-6.2,106.8,'بزرگ‌ترین مجمع‌الجزایر جهان با بیش از ۱۷ هزار جزیره است.'],
+ ['PK','پاکستان','اسلام‌آباد','as',240,'اردو و انگلیسی','روپیه پاکستان',33.7,73.0,'کوه K2، دومین قلهٔ بلند جهان (۸٬۶۱۱ متر)، در آن است.'],
+ ['AF','افغانستان','کابل','as',42,'دری و پشتو','افغانی',34.5,69.2,'کوه‌های هندوکش و تندیس‌های باستانی بامیان از نشانه‌های آن‌اند.'],
+ ['IQ','عراق','بغداد','as',46,'عربی و کردی','دینار عراق',33.3,44.4,'بین‌النهرین (سرزمین میان دجله و فرات) و نخستین نوشته‌های سومری در آن بود.'],
+ ['PE','پرو','لیما','sa',34,'اسپانیایی','سول',-12.0,-77.0,'شهر گمشدهٔ اینکاها یعنی ماچوپیچو در آن قرار دارد.'],
+ ['CL','شیلی','سانتیاگو','sa',19.6,'اسپانیایی','پزو شیلی',-33.4,-70.7,'باریک‌ترین و درازترین کشور جهان از شمال تا جنوب است؛ بیابان آتاکاما خشک‌ترین بیابان غیرقطبی است.'],
+ ['CO','کلمبیا','بوگوتا','sa',52,'اسپانیایی','پزو کلمبیا',4.7,-74.1,'از بزرگ‌ترین تولیدکنندگان قهوه و زمرد در جهان است.'],
+ ['NO','نروژ','اسلو','eu',5.5,'نروژی','کرون نروژ',59.9,10.7,'فیوردهای عمیق و پدیدهٔ «خورشید نیمه‌شب» در شمالش دیده می‌شود.'],
+ ['SE','سوئد','استکهلم','eu',10.5,'سوئدی','کرون سوئد',59.3,18.1,'مراسم اصلی جوایز نوبل هر سال در پایتختش برگزار می‌شود.'],
+ ['GR','یونان','آتن','eu',10.4,'یونانی','یورو',38.0,23.7,'خاستگاه بازی‌های المپیک باستان است.'],
+ ['KZ','قزاقستان','آستانه','as',20,'قزاقی و روسی','تنگه',51.2,71.4,'بزرگ‌ترین کشور جهان است که به دریای آزاد راه ندارد.',1],
+ ['TH','تایلند','بانکوک','as',71,'تایلندی','بات',13.8,100.5,'نام قدیمی‌اش «سیام» بود و فیل نماد ملی آن است.'],
+ ['VN','ویتنام','هانوی','as',100,'ویتنامی','دونگ',21.0,105.8,'خلیج هالونگ با هزاران صخرهٔ آهکی در آن است و از بزرگ‌ترین صادرکنندگان قهوه و برنج است.']
+].map(a=>({cc:a[0],n:a[1],cap:a[2],ct:a[3],pop:a[4],lang:a[5],cur:a[6],lat:a[7],lon:a[8],fact:a[9],amb:!!a[10],fl:flag(a[0])}));
+const LAND={
+ na:[[-168,66],[-140,70],[-95,72],[-80,70],[-62,58],[-55,48],[-70,42],[-80,30],[-82,25],[-97,26],[-105,22],[-95,16],[-87,14],[-80,8],[-85,10],[-105,20],[-118,32],[-124,40],[-125,49],[-135,58],[-152,59],[-165,62]],
+ sa:[[-80,9],[-62,11],[-50,2],[-35,-6],[-40,-22],[-48,-28],[-58,-38],[-65,-42],[-68,-55],[-75,-50],[-73,-37],[-71,-18],[-81,-5]],
+ eu:[[-10,36],[-9,43],[-2,48],[5,52],[8,57],[12,56],[20,60],[28,70],[40,68],[40,55],[30,46],[28,41],[22,37],[12,38],[5,43],[-5,36]],
+ af:[[-17,21],[-10,33],[10,37],[32,31],[35,25],[43,12],[51,12],[40,-3],[40,-15],[35,-25],[20,-35],[15,-28],[12,-15],[9,0],[9,4],[-8,5],[-17,14]],
+ as:[[28,41],[40,55],[40,68],[70,73],[110,77],[140,72],[180,68],[165,60],[140,52],[135,43],[122,40],[122,30],[110,20],[105,10],[100,2],[98,15],[92,22],[80,10],[72,20],[67,25],[57,25],[52,29],[44,13],[35,30],[35,36]],
+ oc:[[114,-22],[122,-18],[136,-12],[142,-11],[153,-26],[150,-37],[140,-38],[130,-32],[115,-34]]
+};
+let gSel=null,gFilter='all',geoReady=false,gTab='map';
+const gDots=[];
+function geoInit(){
+  if(!geoReady){
+    geoReady=true;
+    tabs($('#geTabs'),'ge-',t=>{gTab=t;if(t==='map')sizeMap()});
+    $('#gchips').innerHTML=`<button class="chip on" data-c="all">همه</button>`+Object.entries(CONT).map(([k,v])=>`<button class="chip" data-c="${k}"><i class="dot" style="background:${v[1]}"></i>${v[0]}</button>`).join('');
+    $$('#gchips .chip').forEach(b=>b.onclick=()=>{gFilter=b.dataset.c;$$('#gchips .chip').forEach(x=>x.classList.toggle('on',x===b));renderList()});
+    $('#map').addEventListener('pointerdown',e=>{
+      const r=e.target.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+      let best=null,bd=1e9;
+      gDots.forEach(d=>{if(!d.on)return;const dd=Math.hypot(d.x-x,d.y-y);if(dd<18&&dd<bd){bd=dd;best=d.c}});
+      if(best)selCountry(best);
+    });
+    addEventListener('resize',()=>{if(current==='geo')sizeMap()});
+    runQuiz($('#geQuiz'),geoQuiz,'#ffb53d');
+    renderList();selCountry(CO[0],true);
+    requestAnimationFrame(mapLoop);
+  }
+  sizeMap();updateProg();
+}
+function sizeMap(){
+  const c=$('#map'),w=c.parentElement.clientWidth;if(!w)return;
+  const h=Math.round(w*(w<500?.62:.5));
+  c.style.height=h+'px';c.width=w*DPR;c.height=h*DPR;
+}
+function renderList(){
+  const L=CO.filter(c=>gFilter==='all'||c.ct===gFilter);
+  $('#gcount').textContent=fa(L.length)+' کشور';
+  $('#glist').innerHTML=L.map(c=>`<button class="gc ${S.seen.includes('c'+c.cc)?'seen':''} ${gSel&&gSel.cc===c.cc?'on':''}" data-cc="${c.cc}"><span class="fl">${c.fl}</span>${c.n}</button>`).join('');
+  $$('.gc').forEach(b=>b.onclick=()=>{selCountry(CO.find(c=>c.cc===b.dataset.cc));$('#ginfo').scrollIntoView({behavior:'smooth',block:'nearest'})});
+}
+function updateProg(){
+  const n=CO.filter(c=>S.seen.includes('c'+c.cc)).length;
+  $('#gprog').textContent='کشف‌شده: '+fa(n)+' از '+fa(CO.length);
+  $('#gbar').style.width=(n/CO.length*100)+'%';
+}
+function selCountry(c,silent){
+  gSel=c;
+  if(!silent&&!S.seen.includes('c'+c.cc)){S.seen.push('c'+c.cc);store.set('seen',S.seen);addXP(3)}
+  const mx=Math.max(...CO.map(x=>x.pop)),ct=CONT[c.ct];
+  const rank=[...CO].sort((a,b)=>b.pop-a.pop).findIndex(x=>x.cc===c.cc)+1;
+  $('#ginfo').innerHTML=`<div class="ginfo"><div class="bigf">${c.fl}</div><div>
+    <h4>${c.n}</h4>
+    <div class="kv" style="justify-content:start"><span>پایتخت</span><b>${c.cap}</b><span>قاره</span><b style="color:${ct[1]}">${ct[0]}${c.amb?' (بخشی از خاک در قارهٔ دیگر)':''}</b>
+    <span>جمعیت</span><b>حدود ${c.pop>=10?num(c.pop):dec(c.pop)} میلیون نفر</b><span>زبان</span><b>${c.lang}</b><span>واحد پول</span><b>${c.cur}</b></div>
+    <div class="bar" title="جمعیت نسبت به پرجمعیت‌ترین کشور فهرست"><i style="width:${Math.max(2,c.pop/mx*100)}%;background:${ct[1]}"></i></div>
+    <small style="color:var(--mute)">رتبهٔ ${fa(rank)} از ${fa(CO.length)} کشور فهرست از نظر جمعیت</small></div></div>
+    <div class="fact" style="border-color:var(--amber);background:rgba(255,181,61,.1)">⭐ ${c.fact}</div>`;
+  renderList();updateProg();
+}
+function proj(lon,lat,W,H){return[(lon+180)/360*W,(82-lat)/140*H]}
+function mapLoop(){
+  if(current==='geo'&&gTab==='map'&&$('#map').width)drawMap();
+  requestAnimationFrame(mapLoop);
+}
+function drawMap(){
+  const c=$('#map'),ctx=c.getContext('2d'),W=c.width/DPR,H=c.height/DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='rgba(120,170,255,.12)';ctx.lineWidth=1;
+  for(let lo=-180;lo<=180;lo+=30){const[x]=proj(lo,0,W,H);ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+  for(let la=-60;la<=80;la+=20){const[,y]=proj(0,la,W,H);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+  ctx.strokeStyle='rgba(255,255,255,.28)';const[,ey]=proj(0,0,W,H);ctx.setLineDash([6,6]);ctx.beginPath();ctx.moveTo(0,ey);ctx.lineTo(W,ey);ctx.stroke();ctx.setLineDash([]);
+  Object.entries(LAND).forEach(([k,pts])=>{
+    ctx.beginPath();pts.forEach((p,i)=>{const[x,y]=proj(p[0],p[1],W,H);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath();
+    ctx.fillStyle='rgba(140,170,255,.13)';ctx.fill();ctx.strokeStyle='rgba(170,195,255,.35)';ctx.stroke();
+  });
+  gDots.length=0;
+  const t=performance.now();
+  CO.forEach(co=>{
+    const[x,y]=proj(co.lon,co.lat,W,H),on=gFilter==='all'||co.ct===gFilter,col=CONT[co.ct][1],seen=S.seen.includes('c'+co.cc);
+    gDots.push({c:co,x,y,on});
+    ctx.globalAlpha=on?1:.18;ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,W<500?4.5:6,0,6.3);ctx.fill();
+    if(seen){ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke()}
+    ctx.globalAlpha=1;
+  });
+  if(gSel){
+    const[x,y]=proj(gSel.lon,gSel.lat,W,H),p=RM?0:((t/900)%1);
+    ctx.strokeStyle=CONT[gSel.ct][1];ctx.lineWidth=2;ctx.globalAlpha=1-p;ctx.beginPath();ctx.arc(x,y,8+p*18,0,6.3);ctx.stroke();ctx.globalAlpha=1;
+    ctx.font="600 13px 'Twemoji Country Flags',Vazirmatn,Tahoma,sans-serif";ctx.textAlign='center';
+    const label=gSel.fl+' '+gSel.n,tw=ctx.measureText(label).width+16;
+    const lx=Math.min(Math.max(x,tw/2+4),W-tw/2-4),ly=y>34?y-16:y+30;
+    ctx.fillStyle='rgba(10,16,36,.88)';ctx.beginPath();ctx.roundRect?ctx.roundRect(lx-tw/2,ly-14,tw,24,10):ctx.rect(lx-tw/2,ly-14,tw,24);ctx.fill();
+    ctx.fillStyle='#fff';ctx.fillText(label,lx,ly+3);
+  }
+}
+function geoQuiz(){
+  const Q=[],used=new Set();
+  const pickC=()=>{let c,g=0;do{c=rnd(CO);g++}while(used.has(c.cc)&&g<60);used.add(c.cc);return c};
+  const others=(c,n,f=()=>true)=>shuffle(CO.filter(x=>x.cc!==c.cc&&f(x))).slice(0,n);
+  const types=[
+    ()=>{const c=pickC();return mkQ(`پایتخت ${c.n} کدام شهر است؟`,c.cap,others(c,3).map(x=>x.cap),`${c.cap} پایتخت ${c.n} است.`)},
+    ()=>{const c=pickC();return mkQ(`${c.cap} پایتخت کدام کشور است؟`,c.n,others(c,3).map(x=>x.n),`${c.fact}`)},
+    ()=>{const c=pickC();return mkQ('این پرچم متعلق به کدام کشور است؟',c.n,others(c,3).map(x=>x.n),`${c.n}؛ پایتخت: ${c.cap}.`,c.fl)},
+    ()=>{const c=pickC();return mkQ(`واحد پول «${c.cur}» مربوط به کدام کشور است؟`,c.n,others(c,3,x=>x.cur!==c.cur).map(x=>x.n),`در ${c.n} از ${c.cur} استفاده می‌کنند.`)},
+    ()=>{const c=pickC();return mkQ('این سرنخ مربوط به کدام کشور است؟<br><small style="color:var(--mute);font-weight:400">'+c.fact+'</small>',c.n,others(c,3).map(x=>x.n),`پاسخ: ${c.n} با پایتخت ${c.cap}.`)},
+    ()=>{const c=pickC();const four=[c,...others(c,3)];const mx=four.reduce((a,b)=>b.pop>a.pop?b:a);if(four.filter(x=>x.pop===mx.pop).length>1)return null;return mkQ('کدام کشور از نظر جمعیت بزرگ‌تر است؟',mx.n,four.filter(x=>x!==mx).map(x=>x.n),four.map(x=>x.n+': حدود '+(x.pop>=10?num(x.pop):dec(x.pop))+' میلیون').join('، ')+'.')},
+    ()=>{const c=pickC();if(c.amb)return null;return mkQ(`${c.n} در کدام قاره قرار دارد؟`,CONT[c.ct][0],shuffle(Object.keys(CONT).filter(k=>k!==c.ct)).slice(0,3).map(k=>CONT[k][0]),`${c.n} در ${CONT[c.ct][0]} است.`)},
+    ()=>{const c=pickC();return mkQ(`زبان رایج در ${c.n} کدام است؟`,c.lang,[...new Set(others(c,12,x=>x.lang!==c.lang).map(x=>x.lang))].slice(0,3),`در ${c.n} به ${c.lang} صحبت می‌کنند.`)}
+  ];
+  let guard=0;
+  while(Q.length<8&&guard++<100){const q=rnd(types)();if(q&&new Set(q.opts).size===q.opts.length)Q.push(q)}
+  return Q;
+}
+
+renderXP();
+geoInit();
+</script>
+</body>
+</html>
