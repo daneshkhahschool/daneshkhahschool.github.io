@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#160750">
+    <meta name="description" content="ورود به پنل اختصاصی دانش‌آموزان دبیرستان شهید دانشخواه؛ برنامه هفتگی، نمرات، برنامه فوق برنامه و اطلاعیه‌های مدرسه دانشخواه.">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <link rel="canonical" href="https://school.daneshkhah.workers.dev/pages/students">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fa_IR">
+    <meta property="og:site_name" content="دبیرستان شهید دانشخواه">
+    <meta property="og:title" content="پنل دانش‌آموزان دبیرستان شهید دانشخواه">
+    <meta property="og:description" content="ورود به پنل اختصاصی دانش‌آموزان دبیرستان شهید دانشخواه؛ برنامه هفتگی، نمرات، برنامه فوق برنامه و اطلاعیه‌های مدرسه دانشخواه.">
+    <meta property="og:url" content="https://school.daneshkhah.workers.dev/pages/students">
+    <meta property="og:image" content="https://school.daneshkhah.workers.dev/images/daneshkhah_icon.png">
+    <meta name="twitter:card" content="summary">
+    <link rel="preload" href="../fonts/Vazir.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="icon" href="../images/daneshkhah_icon.png">
+    <title>پنل دانش‌آموزان دبیرستان شهید دانشخواه</title>
+    <script src="../scripts/main.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <img src="../images/daneshkhah_icon.png" alt="لوگوی دبیرستان شهید دانشخواه" class="icon">
+            <h1 class="school-name">دبیرستان شهید دانشخواه</h1>
+            <em class="school-small-info">
+                دبیرستان دولتی هیات امنایی متوسطه اول شهید دانشخواه
+            </em>
+        </div>
+        <nav class="header-bottom" aria-label="منوی اصلی">
+            <a href="../index.html">خانه</a>
+            <a href="about.html">درباره ما</a>
+            <a href="contact.html">ارتباط با ما</a>
+            <a href="students.html" class="active">پنل دانش‌آموزان</a>
+            <a href="employees.html">کارکنان</a>
+            <a href="learn.html">آموزشی</a>
+            <a href="gallery.html">گالری</a>
+            <a href="adress.html">نشانی ما</a>
+            <a href="news.html">اخبار</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="login-box glass" id="loginBox">
+            <div class="login-badge" data-i="lock"></div>
+            <h2>ورود به پنل دانش‌آموزان</h2>
+            <p class="login-hint" id="loginHint"></p>
+            <div class="field"><span class="f-ico" data-i="user"></span><input type="text" id="studentName" placeholder="نام و نام خانوادگی" autocomplete="off"></div>
+            <div class="field"><span class="f-ico" data-i="users"></span>
+                <select id="studentClass">
+                    <option value="" disabled selected>انتخاب کلاس</option>
+                    <option value="701">701</option>
+                    <option value="702">702</option>
+                    <option value="703">703</option>
+                    <option value="801">801</option>
+                    <option value="802">802</option>
+                    <option value="803">803</option>
+                    <option value="901">901</option>
+                    <option value="902">902</option>
+                    <option value="903">903</option>
+                </select>
+            </div>
+            <div class="field"><span class="f-ico" data-i="key"></span><input type="password" id="studentPass" placeholder="رمز عبور" autocomplete="off"><button class="eye" id="eyeBtn" type="button" data-i="eye" aria-label="نمایش رمز"></button></div>
+            <button class="btn" id="loginBtn" type="button" data-i="arrowleft">ورود</button>
+            <div class="error-msg" id="errorMsg" role="alert"></div>
+        </div>
+
+        <div class="panel-content glass" id="panelContent">
+            <div class="panel-top">
+                <h2><span id="greetWord"></span>، <span class="welcome-name" id="displayName"></span> عزیز</h2>
+                <button class="logout-btn" id="logoutBtn" type="button" data-i="logout">خروج</button>
+            </div>
+            <span class="class-badge">کلاس: <span id="displayClass"></span></span>
+            <p>به پنل اختصاصی دانش‌آموزان دبیرستان شهید دانشخواه خوش آمدید.</p>
+
+            <h3 class="section-title">دسترسی سریع</h3>
+            <div class="panel-cards">
+                <div class="panel-card" id="cardSchedule" role="button" tabindex="0">
+                    <div class="p-ico" data-i="calendar"></div>
+                    <h3>برنامه هفتگی</h3>
+                    <p>مشاهده برنامه کلاسی</p>
+                </div>
+                <div class="panel-card" id="cardGrades" role="button" tabindex="0">
+                    <div class="p-ico" data-i="chart"></div>
+                    <h3>نمرات</h3>
+                    <p>مشاهده در مای مدیو</p>
+                </div>
+                <div class="panel-card" id="cardExtra" role="button" tabindex="0">
+                    <div class="p-ico" data-i="palette"></div>
+                    <h3>فوق برنامه</h3>
+                    <p>مشاهده برنامه فوق برنامه</p>
+                </div>
+                <div class="panel-card static">
+                    <div class="p-ico" data-i="bell"></div>
+                    <h3>اطلاعیه‌ها</h3>
+                    <p>هنوز اطلاعیه‌ای منتشر نشده</p>
+                </div>
+                <div class="panel-card" id="cardPass" role="button" tabindex="0">
+                    <div class="p-ico" data-i="key"></div>
+                    <h3>رمز خصوصی</h3>
+                    <p>رمز ورود اختصاصی خودتان را تعیین کنید</p>
+                    <span class="pass-state off" id="passState"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-box" id="modalBox">
+            <button class="modal-close" id="modalClose" type="button" aria-label="بستن">&times;</button>
+            <h3 id="modalTitle"></h3>
+            <span class="modal-class" id="modalClass"></span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="foot-chips">
+            <a href="tel:02177409781" data-i="phone" dir="ltr">02177409781</a>
+            <a href="mailto:schooldaneshkhah@gmail.com" data-i="mail" dir="ltr">schooldaneshkhah@gmail.com</a>
+        </div>
+        <p>&copy; تمامی حقوق محفوظ است - دبیرستان شهید دانشخواه</p>
+    </footer>
+
+    <a href="makers.html" class="makers-link">سازندگان</a>
+
+    <script src="../scripts/students.js" defer></script>
+</body>
+</html>
